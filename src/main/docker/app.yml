@@ -1,0 +1,15 @@
+version: '2'
+services:
+    iaconnectorserver-app:
+        image: iaconnectorserver
+        external_links:
+            - iaconnectorserver-mysql:mysql
+        environment:
+            - SPRING_PROFILES_ACTIVE=prod
+            - SPRING_DATASOURCE_URL=jdbc:mysql://mysql:3306/iaconnectorserver?useUnicode=true&characterEncoding=utf8&useSSL=false
+        ports:
+            - 8080:8080
+    iaconnectorserver-mysql:
+        extends:
+            file: mysql.yml
+            service: iaconnectorserver-mysql

@@ -1,0 +1,28 @@
+.test {
+
+}
+
+#filler-list {
+    float: left;
+    width: 230px;
+}
+
+#game-content {
+    margin-left: 250px;
+}
+
+#filler-content {
+    clear: both;
+}
+
+#filler-table-grid {
+    width: 100%;
+}
+
+#filler-table-grid td {
+    color: grey;
+    font-weight: bold;
+    text-align: center;
+    padding: 5px;
+}
+

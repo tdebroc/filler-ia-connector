@@ -1,0 +1,57 @@
+<div ng-cloak id="filler-content">
+
+    <md-list id="filler-list">
+        <md-button class="md-raised md-primary" aria-label="Add Game" ng-click="addGameModal()">
+            <md-icon md-font-library="material-icons" >add</md-icon>
+            add Game
+        </md-button>
+        <md-button class="md-fab md-primary" aria-label="Add Game">
+            <md-icon md-font-library="material-icons" ng-click="refreshGames()">refresh</md-icon>
+        </md-button>
+
+        <md-list-item class="md-3-line" ng-repeat="(key, game) in games track by key" ng-click="selectGame(key)">
+            <p>
+                Game {{key}}<br/>
+                {{game.dateCreated  | date:'medium'}}<br/>
+                {{game.players.length}} Players
+            </p>
+            <md-divider></md-divider>
+        </md-list-item>
+    </md-list>
+
+    <md-card id="game-content">
+        <md-card-title>
+            <md-card-title-text>
+                <span class="md-headline">Game {{currentIdGame}}</span>
+            </md-card-title-text>
+        </md-card-title>
+        <md-card-content layout="row" layout-align="space-between">
+            <div class="card-media">
+                <table id="filler-table-grid">
+                    <tr ng-repeat="line in currentGame.grid.grid">
+                        <td ng-repeat="cell in line" ng-style="{'background-color': getColor(cell.color)}">{{cell.color}}</td>
+                    </tr>
+                </table>
+                <div class="spacer" style="clear: both;"></div>
+            </div>
+            <md-card-actions layout="column">
+                <md-button class="md-icon-button" aria-label="Delete">
+                    <md-icon md-font-library="material-icons" ng-click="showConfirmDelete()">delete</md-icon>
+                </md-button>
+                <md-button class="md-icon-button" aria-label="Start" ng-click="startGame(currentIdGame)">
+                    <i class="material-icons" ng-style="{'color' : currentGame.started ? 'green' : ''}">play_circle_filled</i>
+                </md-button>
+            </md-card-actions>
+        </md-card-content>
+        <md-card-content>
+            <u>{{currentGame.players.length}} Players :</u>
+            <div ng-repeat="player in currentGame.players">
+                <span ng-style="{'background-color': getColor(player.playerColor)}">
+                    Player {{$index + 1}} : {{player.playerColor}}
+                </span>, init position: {{player.initPosition}}
+            </div>
+        </md-card-content>
+    </md-card>
+
+    <div class="spacer" style="clear: both;"></div>
+</div>
