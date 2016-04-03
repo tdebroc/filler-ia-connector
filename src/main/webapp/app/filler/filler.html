@@ -45,7 +45,9 @@
         </md-card-content>
         <md-card-content>
             <u>{{currentGame.players.length}} Players :</u>
-            {{currentGame.started ? "Game has started" : "Game has not started"}}
+            {{currentGame.started ? "" : "Game has not started"}}
+            {{currentGame.started && !currentGame.finished ? "Game is in progress" : ""}}
+            {{currentGame.finished ? "Game has finished" : ""}}
             | Round {{currentGame.round}} |
             Turn of Player {{currentGame.currentIdPlayerTurn + 1}} <br/>
             <div ng-repeat="player in currentGame.players"  ng-init="idPlayerTurn = $index">
