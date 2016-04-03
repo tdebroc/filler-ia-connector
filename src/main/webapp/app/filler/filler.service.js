@@ -23,6 +23,20 @@
              },
              addGame : function(gridSize) {
                 return $http.get('iaconnector/addGame?gridSize=' + gridSize);
+             },
+             addPlayer : function(idGame) {
+                return $http({
+                   'url' : 'iaconnector/addPlayer?idGame=' + idGame,
+                   method: 'GET',
+                   transformResponse: [function (data) {
+                         // Do whatever you want!
+                         return data;
+                     }]
+
+                })
+             },
+             sendMove : function(color, playerUUID) {
+                return $http.get('iaconnector/sendMove?color=' + color + "&playerUUID=" + playerUUID);
              }
         };
     }

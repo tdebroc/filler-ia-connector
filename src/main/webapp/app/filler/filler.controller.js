@@ -10,6 +10,17 @@
 
     function FillerController ($scope, Principal, LoginService, FillerService, $mdDialog, $timeout, $interval) {
 
+        $scope.currentPlayers = {};
+        function loadCurrentPlayers() {
+            var currentPlayerString = localStorage.getItem("currentPlayers");
+            if (!currentPlayerString) {
+                $scope.currentPlayers = {};
+            } else {
+                $scope.currentPlayers = JSON.parse(currentPlayerString);
+            }
+        }
+        loadCurrentPlayers();
+
         $scope.mapColor = {
             'R' : "red",
             'J' : "yellow",
@@ -22,6 +33,9 @@
             return $scope.mapColor[color];
         }
 
+        //=====================================================================
+        // Display/refresh/select Game
+        //=====================================================================
         $scope.refreshGames = function() {
             $scope.games = FillerService.getGames(function(response) {
                 $scope.games = response.data;
@@ -45,21 +59,53 @@
             gameRefresher = $interval( $scope.refreshGame.bind(this, idGame), 1000);
         }
 
-        $scope.startGame = function(idGame) {
-            FillerService.startGame(idGame);
-        }
 
         $scope.refreshGame = function(idGame) {
             FillerService.getGame(idGame).then(function(response) {
                 $scope.games[idGame] = response.data;
                 $scope.selectGame(idGame)
             })
-         //   gameRefresher = $interval($scope.refreshGame.bind(this, idGame), 1000);
         }
 
+        //=====================================================================
+        // Play Game
+        //=====================================================================
+        $scope.startGame = function(idGame) {
+            FillerService.startGame(idGame);
+        }
 
+        $scope.addPlayer = function(idGame) {
+            var idPlayerTurn = $scope.currentGame.players.length;
+            FillerService.addPlayer(idGame).then(function(response) {
+                var key = getKey(idGame, idPlayerTurn);
+                $scope.currentPlayers[key] = response.data;
+                localStorage.setItem("currentPlayers", JSON.stringify($scope.currentPlayers));
+            });
+        }
+
+        function getKey(idGame, idPlayerTurn) {
+            return idGame + "#" + idPlayerTurn
+        }
+
+        $scope.sendMove = function(color, currentIdGame, idPlayerTurn) {
+            var playerUUID = $scope.currentPlayers[getKey(currentIdGame, idPlayerTurn)];
+            FillerService.sendMove(color, playerUUID).then(function() {
+                $scope.refreshGame(currentIdGame);
+            });
+        }
+
+        $scope.isCurrentPlayer = function(currentIdGame, idPlayerTurn) {
+            return $scope.currentPlayers[getKey(currentIdGame, idPlayerTurn)]
+        }
+
+        $scope.isPlayerTurn = function(game, idPlayerTurn) {
+            return game.started && game.currentIdPlayerTurn == idPlayerTurn;
+        }
+
+        //=====================================================================
+        // Add Game
+        //=====================================================================
         $scope.addGameGridSize = 13;
-
         $scope.addGameModal = function(ev) {
             $mdDialog.show({
               controller: DialogController,
@@ -90,7 +136,9 @@
 
         }
 
-
+        //=====================================================================
+        // Delete Game
+        //=====================================================================
         $scope.showConfirmDelete = function(ev) {
             var confirm = $mdDialog.confirm()
                   .title('Are you sure you want to remove this Game ?')

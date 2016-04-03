@@ -91,24 +91,19 @@ public class Game {
     public void startEatColors(Player currentPlayer, char c) {
         Set<Position> visited = new HashSet<Position>();
         Position pos = currentPlayer.getInitPosition();
-        eatColors(currentPlayer, c, pos, visited, false);
+        eatColors(currentPlayer, c, pos, visited);
     }
 
 
 
-    private void eatColors(Player currentPlayer, char c, Position pos, Set<Position> visited, boolean isEatingNewColor) {
+    private void eatColors(Player currentPlayer, char c, Position pos, Set<Position> visited) {
         if (visited.contains(pos)) {
             return;
         }
         visited.add(pos);
-        if (getGrid().getCell(pos).getColor() != currentPlayer.getPlayerColor() &&
-            getGrid().getCell(pos).getColor() != c) {
+        if (getGrid().getCell(pos).getColor() != currentPlayer.getPlayerColor()) {
             return;
         }
-        if (isEatingNewColor && getGrid().getCell(pos).getColor() == currentPlayer.getPlayerColor()) {
-            return;
-        }
-        isEatingNewColor = c == getGrid().getCell(pos).getColor();
         getGrid().getCell(pos).setColor(c);
 
 
@@ -120,7 +115,7 @@ public class Game {
             int x = pos.getX() + increment.getX();
             int y = pos.getY() + increment.getY();
             if (x >= 0 && x < getGrid().getGrid().length && y >= 0 && y < getGrid().getGrid()[0].length) {
-                eatColors(currentPlayer, c, new Position(x, y), visited, isEatingNewColor);
+                eatColors(currentPlayer, c, new Position(x, y), visited);
             }
         }
     }

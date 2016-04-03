@@ -19,7 +19,7 @@
     width: 100%;
 }
 
-#filler-table-grid td {
+#filler-table-grid td, .filler-cell{
     color: grey;
     font-weight: bold;
     text-align: center;

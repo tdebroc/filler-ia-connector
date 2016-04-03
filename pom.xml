@@ -12,7 +12,7 @@
     <groupId>com.tdebroc.myapp</groupId>
     <artifactId>ia-connector-server</artifactId>
     <version>0.0.1-SNAPSHOT</version>
-    <packaging>war</packaging>
+    <packaging>jar</packaging>
     <name>iaConnectorServer</name>
 
     <repositories>

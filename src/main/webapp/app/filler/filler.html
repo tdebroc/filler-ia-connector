@@ -45,11 +45,33 @@
         </md-card-content>
         <md-card-content>
             <u>{{currentGame.players.length}} Players :</u>
-            <div ng-repeat="player in currentGame.players">
+            {{currentGame.started ? "Game has started" : "Game has not started"}}
+            | Round {{currentGame.round}} |
+            Turn of Player {{currentGame.currentIdPlayerTurn + 1}} <br/>
+            <div ng-repeat="player in currentGame.players"  ng-init="idPlayerTurn = $index">
                 <span ng-style="{'background-color': getColor(player.playerColor)}">
                     Player {{$index + 1}} : {{player.playerColor}}
                 </span>, init position: {{player.initPosition}}
+
+                <span ng-if="isCurrentPlayer(currentIdGame, idPlayerTurn)">
+                    <i class="material-icons">person</i>
+                    <span ng-if="isPlayerTurn(currentGame, idPlayerTurn)">
+                        It's your turn, choose color:
+                        <table>
+                            <tr>
+                                <td ng-repeat="(key,color) in mapColor"
+                                    ng-style="{'background-color' : color}" class="filler-cell"
+                                    ng-click="sendMove(key, currentIdGame, idPlayerTurn)"> {{key}} </td>
+                            </tr>
+                        </table>
+                    </span>
+                </span>
             </div>
+            <br/>
+            <md-button class="md-raised md-primary" aria-label="Add Game" ng-click="addPlayer(currentIdGame)">
+                <i class="material-icons" >person_add</i>
+                Add player
+            </md-button>
         </md-card-content>
     </md-card>
 
