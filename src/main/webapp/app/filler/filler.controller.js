@@ -102,6 +102,18 @@
             return game.started && game.currentIdPlayerTurn == idPlayerTurn;
         }
 
+
+        $scope.countPoints = function(game, color) {
+            var grid = game.grid.grid;
+            var points = 0;
+            for (var i = 0; i < grid.length; i++) {
+                for (var j = 0; j < grid.length; j++) {
+                    if (grid[i][j].color == color) points++;
+                }
+            }
+            return points;
+        }
+
         //=====================================================================
         // Add Game
         //=====================================================================
