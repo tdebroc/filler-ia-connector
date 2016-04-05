@@ -9,10 +9,10 @@
             <md-icon md-font-library="material-icons" ng-click="refreshGames()">refresh</md-icon>
         </md-button>
 
-        <md-list-item class="md-3-line" ng-repeat="(key, game) in games track by key" ng-click="selectGame(key)">
+        <md-list-item class="md-3-line" ng-repeat="(key, game) in games track by key" ng-click="selectGame(key)" >
             <p>
                 Game {{key}}<br/>
-                {{game.dateCreated  | date:'medium'}}<br/>
+                {{game.dateCreated  | date:'short'}}<br/>
                 {{game.players.length}} Players
             </p>
             <md-divider></md-divider>

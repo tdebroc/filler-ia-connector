@@ -50,10 +50,7 @@
         var gameRefresher;
         $scope.selectGame = function(idGame) {
             $scope.currentIdGame = idGame;
-            $scope.currentGame = $scope.games[idGame];
-
             if (gameRefresher) {
-                // debugger;
                 $interval.cancel(gameRefresher);
             }
             gameRefresher = $interval( $scope.refreshGame.bind(this, idGame), 1000);
@@ -62,8 +59,7 @@
 
         $scope.refreshGame = function(idGame) {
             FillerService.getGame(idGame).then(function(response) {
-                $scope.games[idGame] = response.data;
-                $scope.selectGame(idGame)
+                $scope.currentGame = response.data;
             })
         }
 
@@ -99,7 +95,7 @@
         }
 
         $scope.isPlayerTurn = function(game, idPlayerTurn) {
-            return game.started && game.currentIdPlayerTurn == idPlayerTurn;
+            return game.started && game.currentIdPlayerTurn == idPlayerTurn && !game.finished;
         }
 
 
@@ -168,6 +164,11 @@
             });
           };
 
+        //=====================================================================
+        // Fix width in smartphone
+        //=====================================================================
+
+        // $("html").width($(window).width());
 
     }
 })();

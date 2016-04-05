@@ -37,6 +37,9 @@ public class IAConnectorResource {
 
     @RequestMapping(method = RequestMethod.GET, value = "/addGame")
     public int addGame(@RequestParam(value = "gridSize") int gridSize) throws URISyntaxException {
+        if (gridSize >= 42) {
+            return -1;
+        }
         Game game = new Game();
         game.setDateCreated(new Date());
         game.initGame(gridSize);

@@ -4,11 +4,11 @@
 
 #filler-list {
     float: left;
-    width: 230px;
+    width: 130px;
 }
 
 #game-content {
-    margin-left: 250px;
+    margin-left: 120px;
 }
 
 #filler-content {
@@ -24,5 +24,9 @@
     font-weight: bold;
     text-align: center;
     padding: 5px;
+}
+
+md-list-item button {
+    padding: 0px !important;
 }
 
