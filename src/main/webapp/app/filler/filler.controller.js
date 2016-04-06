@@ -6,9 +6,10 @@
         .controller('FillerController', FillerController);
 
     FillerController.$inject = ['$scope', 'Principal', 'LoginService', 'FillerService', '$mdDialog',
-            '$timeout', '$interval'];
+            '$timeout', '$interval', 'FillerSocketService'];
 
-    function FillerController ($scope, Principal, LoginService, FillerService, $mdDialog, $timeout, $interval) {
+    function FillerController ($scope, Principal, LoginService, FillerService, $mdDialog, $timeout,
+                                $interval, FillerSocketService) {
 
         $scope.currentPlayers = {};
         function loadCurrentPlayers() {
@@ -33,6 +34,13 @@
             return $scope.mapColor[color];
         }
 
+        FillerSocketService.connect();
+        FillerSocketService.receive().then(null, null, function(game) {
+            if (game.idGame == $scope.currentIdGame) {
+                $scope.currentGame = game
+            }
+        });
+        FillerSocketService.subscribe()
         //=====================================================================
         // Display/refresh/select Game
         //=====================================================================
@@ -43,7 +51,6 @@
                     $scope.selectGame(1);
                 }
             });
-            // setTimeout(refreshGames, 1000)
         }
         $scope.refreshGames();
 
@@ -53,7 +60,8 @@
             if (gameRefresher) {
                 $interval.cancel(gameRefresher);
             }
-            gameRefresher = $interval( $scope.refreshGame.bind(this, idGame), 1000);
+            $scope.refreshGame(idGame);
+            //gameRefresher = $interval( $scope.refreshGame.bind(this, idGame), 1000);
         }
 
 

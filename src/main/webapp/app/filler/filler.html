@@ -12,8 +12,7 @@
         <md-list-item class="md-3-line" ng-repeat="(key, game) in games track by key" ng-click="selectGame(key)" >
             <p>
                 Game {{key}}<br/>
-                {{game.dateCreated  | date:'short'}}<br/>
-                {{game.players.length}} Players
+                {{game.dateCreated  | date:'short'}}
             </p>
             <md-divider></md-divider>
         </md-list-item>
@@ -29,7 +28,9 @@
             <div class="card-media">
                 <table id="filler-table-grid">
                     <tr ng-repeat="line in currentGame.grid.grid">
-                        <td ng-repeat="cell in line" ng-style="{'background-color': getColor(cell.color)}">{{cell.color}}</td>
+                        <td ng-repeat="cell in line" ng-style="{'background-color': getColor(cell.color)}">
+                           {{cell.color}}
+                        </td>
                     </tr>
                 </table>
                 <div class="spacer" style="clear: both;"></div>
@@ -71,7 +72,7 @@
                 ({{countPoints(currentGame, currentGame.players[idPlayerTurn].playerColor)}} Points)
             </div>
             <br/>
-            <md-button class="md-raised md-primary" aria-label="Add Game" ng-click="addPlayer(currentIdGame)">
+            <md-button ng-if="!game.started" class="md-raised md-primary" aria-label="Add Game" ng-click="addPlayer(currentIdGame)">
                 <i class="material-icons" >person_add</i>
                 Add player
             </md-button>
