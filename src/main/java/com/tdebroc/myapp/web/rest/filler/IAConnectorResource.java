@@ -45,7 +45,7 @@ public class IAConnectorResource {
     public static Map<String, PlayerInstance> playersInstances = new HashMap<>();
 
     public IAConnectorResource() throws URISyntaxException {
-        addGame(13);
+        addGameToGamesMap(13);
         Game game = gamesMap.get(1);
         PlayerInstance playerInstance = new PlayerInstance(1, game.getPlayers().size());
         game.addPlayer();
@@ -55,11 +55,7 @@ public class IAConnectorResource {
         playersInstances.put("124", playerInstance2);
     }
 
-    @RequestMapping(method = RequestMethod.GET, value = "/addGame")
-    public int addGame(@RequestParam(value = "gridSize") int gridSize) throws URISyntaxException {
-        if (gridSize >= 42) {
-            return -1;
-        }
+    public int addGameToGamesMap(int gridSize) {
         Game game = new Game();
         game.setDateCreated(new Date());
         game.initGame(gridSize);
@@ -70,9 +66,36 @@ public class IAConnectorResource {
         return newLyGameId;
     }
 
+    //==================================================================================================================
+    //= Sockets
+    //==================================================================================================================
+    private void refreshGames() {
+        messagingTemplate.convertAndSend("/topic/refreshGames", buildGamesSummarized());
+    }
+    private void refreshGame(Game game) {
+        messagingTemplate.convertAndSend("/topic/refreshGame", game);
+    }
+
+    //==================================================================================================================
+    //= Resource
+    //==================================================================================================================
+
+
+
+    @RequestMapping(method = RequestMethod.GET, value = "/addGame")
+    public int addGame(@RequestParam(value = "gridSize") int gridSize) throws URISyntaxException {
+        if (gridSize >= 42) {
+            return -1;
+        }
+        int newId = addGameToGamesMap(gridSize);
+        refreshGames();
+        return newId;
+    }
+
     @RequestMapping(method = RequestMethod.GET, value = "/removeGame")
     public ResponseEntity<MessageResponse>  removeGame(@RequestParam(value = "idGame") int idGame) throws URISyntaxException {
         gamesMap.remove(idGame);
+        refreshGames();
         return sendMessage(null, "OK");
     }
 
@@ -84,12 +107,15 @@ public class IAConnectorResource {
 
     @RequestMapping(method = RequestMethod.GET, value = "/games")
     public ResponseEntity<Map<Integer, GameSummary>> getGames() throws URISyntaxException {
-        messagingTemplate.convertAndSend("/topic/refreshGame", gamesMap);
-        Map<Integer, GameSummary> games = new HashMap<Integer, GameSummary>();
+        return new ResponseEntity<>(buildGamesSummarized(), HttpStatus.OK);
+    }
+
+    private Map<Integer,GameSummary> buildGamesSummarized() {
+        Map<Integer, GameSummary> gamesSummarized = new HashMap<Integer, GameSummary>();
         for (Integer key : gamesMap.keySet()) {
-            games.put(key, new GameSummary(gamesMap.get(key).getDateCreated()));
+            gamesSummarized.put(key, new GameSummary(gamesMap.get(key).getDateCreated()));
         }
-        return new ResponseEntity<>(games, HttpStatus.OK);
+        return gamesSummarized;
     }
 
 
@@ -100,14 +126,12 @@ public class IAConnectorResource {
         return sendMessage(null, "OK");
     }
 
-    private void refreshGame(Game game) {
-        messagingTemplate.convertAndSend("/topic/refreshGame", game);
-    }
+
 
     @RequestMapping(method = RequestMethod.GET, value = "/addPlayer")
     public ResponseEntity<String> addPlayer(@RequestParam(value = "idGame") int idGame) throws URISyntaxException {
         Game game = gamesMap.get(idGame);
-        if (game.isStarted()) {
+        if (game.isStarted() || game.getPlayers().size() >= 4) {
             return null;
         }
         PlayerInstance playerInstance = new PlayerInstance(idGame, game.getPlayers().size());

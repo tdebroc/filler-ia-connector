@@ -37,10 +37,16 @@
         FillerSocketService.connect();
         FillerSocketService.receive().then(null, null, function(game) {
             if (game.idGame == $scope.currentIdGame) {
-                $scope.currentGame = game
+                $scope.currentGame = game;
             }
         });
-        FillerSocketService.subscribe()
+        FillerSocketService.subscribe();
+        FillerSocketService.subscribeRefreshAllGames();
+
+        FillerSocketService.receiveAllGames().then(null, null, function(allGames) {
+            console.log("data2", allGames)
+            $scope.games = allGames;
+        })
         //=====================================================================
         // Display/refresh/select Game
         //=====================================================================

@@ -11,7 +11,11 @@
     function FillerSocketService ($rootScope, $window, $cookies, $http, $q) {
         var stompClient = null;
         var subscriber = null;
+        var subscriberAllGames = null;
+
         var listener = $q.defer();
+        var listenerAllGames = $q.defer();
+
         var connected = $q.defer();
         var alreadyConnectedOnce = false;
 
@@ -19,8 +23,10 @@
             connect: connect,
             disconnect: disconnect,
             receive: receive,
+            receiveAllGames: receiveAllGames,
             subscribe: subscribe,
-            unsubscribe: unsubscribe
+            unsubscribe: unsubscribe,
+            subscribeRefreshAllGames : subscribeRefreshAllGames
         };
 
         return service;
@@ -78,6 +84,19 @@
                     listener.notify(angular.fromJson(data.body));
                 });
             }, null, null);
+        }
+
+        function subscribeRefreshAllGames() {
+            connected.promise.then(function() {
+                subscriberAllGames = stompClient.subscribe('/topic/refreshGames', function(data) {
+                    console.log("data", data)
+                    listenerAllGames.notify(angular.fromJson(data.body));
+                });
+            }, null, null);
+        }
+
+        function receiveAllGames() {
+            return listenerAllGames.promise;
         }
 
         function unsubscribe () {
