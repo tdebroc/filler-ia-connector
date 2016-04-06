@@ -6,10 +6,10 @@
         .controller('FillerController', FillerController);
 
     FillerController.$inject = ['$scope', 'Principal', 'LoginService', 'FillerService', '$mdDialog',
-            '$timeout', '$interval', 'FillerSocketService'];
+            '$timeout', '$interval', 'FillerSocketService', '$stateParams'];
 
     function FillerController ($scope, Principal, LoginService, FillerService, $mdDialog, $timeout,
-                                $interval, FillerSocketService) {
+                                $interval, FillerSocketService, $stateParams) {
 
         $scope.currentPlayers = {};
         function loadCurrentPlayers() {
@@ -44,7 +44,6 @@
         FillerSocketService.subscribeRefreshAllGames();
 
         FillerSocketService.receiveAllGames().then(null, null, function(allGames) {
-            console.log("data2", allGames)
             $scope.games = allGames;
         })
         //=====================================================================
@@ -53,20 +52,18 @@
         $scope.refreshGames = function() {
             $scope.games = FillerService.getGames(function(response) {
                 $scope.games = response.data;
-                if (!$scope.currentGame) {
-                    $scope.selectGame(1);
-                }
             });
         }
         $scope.refreshGames();
 
+
         var gameRefresher;
         $scope.selectGame = function(idGame) {
-            $scope.currentIdGame = idGame;
+            $scope.currentIdGame = idGame && idGame.length > 0 ? idGame : 1;
             if (gameRefresher) {
                 $interval.cancel(gameRefresher);
             }
-            $scope.refreshGame(idGame);
+            $scope.refreshGame($scope.currentIdGame);
             //gameRefresher = $interval( $scope.refreshGame.bind(this, idGame), 1000);
         }
 
@@ -76,7 +73,10 @@
                 $scope.currentGame = response.data;
             })
         }
-
+        // Start
+        if (!$scope.currentGame) {
+            $scope.selectGame($stateParams.gameId);
+        }
         //=====================================================================
         // Play Game
         //=====================================================================
@@ -87,8 +87,11 @@
         $scope.addPlayer = function(idGame) {
             var idPlayerTurn = $scope.currentGame.players.length;
             FillerService.addPlayer(idGame).then(function(response) {
+                console.log(response.data)
+                var idPlayerTurn = response.data.idPlayer;
                 var key = getKey(idGame, idPlayerTurn);
-                $scope.currentPlayers[key] = response.data;
+                $scope.currentPlayers[key] = response.data.UUID;
+
                 localStorage.setItem("currentPlayers", JSON.stringify($scope.currentPlayers));
             });
         }

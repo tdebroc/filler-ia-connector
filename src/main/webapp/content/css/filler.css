@@ -26,7 +26,16 @@
     padding: 5px;
 }
 
+#filler-list md-list-item {
+    padding: 0px !important;
+    min-height: 60px;
+
+}
 md-list-item button {
     padding: 0px !important;
 }
+md-list-item a {
+    text-decoration: none !important;
+}
+
 

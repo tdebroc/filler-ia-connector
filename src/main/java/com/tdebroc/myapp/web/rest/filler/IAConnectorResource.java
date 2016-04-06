@@ -1,31 +1,20 @@
 package com.tdebroc.myapp.web.rest.filler;
 
 import com.tdebroc.filler.connector.MessageResponse;
+import com.tdebroc.filler.connector.PlayerInstance;
 import com.tdebroc.filler.game.Colors;
 import com.tdebroc.filler.game.Game;
 import com.tdebroc.filler.game.GameSummary;
-import com.tdebroc.myapp.security.SecurityUtils;
-import com.tdebroc.myapp.web.websocket.dto.ActivityDTO;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
-import org.springframework.messaging.handler.annotation.Payload;
-import org.springframework.messaging.handler.annotation.SendTo;
 import org.springframework.messaging.simp.SimpMessageSendingOperations;
-import org.springframework.messaging.simp.annotation.SubscribeMapping;
-import org.springframework.messaging.simp.stomp.StompHeaderAccessor;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 
 import javax.inject.Inject;
 import java.net.URISyntaxException;
-import java.security.Principal;
-import java.time.Instant;
-import java.time.ZoneOffset;
-import java.time.ZonedDateTime;
 import java.util.*;
-
-import static com.tdebroc.myapp.config.WebsocketConfiguration.IP_ADDRESS;
 
 /**
  * Created by thibautdebroca on 02/04/16.
@@ -47,10 +36,10 @@ public class IAConnectorResource {
     public IAConnectorResource() throws URISyntaxException {
         addGameToGamesMap(13);
         Game game = gamesMap.get(1);
-        PlayerInstance playerInstance = new PlayerInstance(1, game.getPlayers().size());
+        PlayerInstance playerInstance = new PlayerInstance(1, game.getPlayers().size(), "123");
         game.addPlayer();
         playersInstances.put("123", playerInstance);
-        PlayerInstance playerInstance2 = new PlayerInstance(1, game.getPlayers().size());
+        PlayerInstance playerInstance2 = new PlayerInstance(1, game.getPlayers().size(), "124");
         game.addPlayer();
         playersInstances.put("124", playerInstance2);
     }
@@ -129,21 +118,21 @@ public class IAConnectorResource {
 
 
     @RequestMapping(method = RequestMethod.GET, value = "/addPlayer")
-    public ResponseEntity<String> addPlayer(@RequestParam(value = "idGame") int idGame) throws URISyntaxException {
+    public ResponseEntity<PlayerInstance> addPlayer(@RequestParam(value = "idGame") int idGame) throws URISyntaxException {
         Game game = gamesMap.get(idGame);
         if (game.isStarted() || game.getPlayers().size() >= 4) {
             return null;
         }
-        PlayerInstance playerInstance = new PlayerInstance(idGame, game.getPlayers().size());
-        game.addPlayer();
-        refreshGame(game);
         String userId;
         do {
             userId = UUID.randomUUID().toString();
         } while (playersInstances.containsKey(userId));
+
+        PlayerInstance playerInstance = new PlayerInstance(idGame, game.getPlayers().size(), userId);
+        game.addPlayer();
+        refreshGame(game);
         playersInstances.put(userId, playerInstance);
-        // TODO: return player UUID + idTurnPlayer
-        return new ResponseEntity<>(userId, HttpStatus.OK);
+        return new ResponseEntity<>(playerInstance, HttpStatus.OK);
     }
 
 
@@ -191,14 +180,4 @@ public class IAConnectorResource {
 
 
 
-    public class PlayerInstance {
-        int idGame;
-        int idPlayer;
-        Date timeStart;
-        public PlayerInstance(int idGame, int idPlayer) {
-            this.idPlayer = idPlayer;
-            this.idGame = idGame;
-            timeStart = new Date();
-        }
-    }
 }

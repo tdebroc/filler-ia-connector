@@ -16,6 +16,9 @@ public class Connector {
 
     private String playerUUID;
 
+    private PlayerInstance playerInstance;
+
+
     public Connector(int gameId) {
         this.gameId = gameId;
     }
@@ -35,7 +38,9 @@ public class Connector {
 
     public void registerPlayer() {
         try {
-            playerUUID = sendGet(baseUrl + "/iaconnector/addPlayer?idGame=" + gameId);
+            playerInstance = (PlayerInstance)
+                sentGetAndDeserialize(baseUrl + "/iaconnector/addPlayer?idGame=" + gameId, PlayerInstance.class);
+            playerUUID = playerInstance.UUID;
             System.out.println("Player has been registered. Player UUID is " + playerUUID);
         } catch (Exception e) {
             System.err.println("There was an error while registering player.");
@@ -105,6 +110,11 @@ public class Connector {
 		this.gameId = gameId;
 	}
 
+    public PlayerInstance getPlayerInstance() {
+        return playerInstance;
+    }
 
-
+    public void setPlayerInstance(PlayerInstance playerInstance) {
+        this.playerInstance = playerInstance;
+    }
 }

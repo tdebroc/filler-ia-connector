@@ -89,7 +89,6 @@
         function subscribeRefreshAllGames() {
             connected.promise.then(function() {
                 subscriberAllGames = stompClient.subscribe('/topic/refreshGames', function(data) {
-                    console.log("data", data)
                     listenerAllGames.notify(angular.fromJson(data.body));
                 });
             }, null, null);

@@ -10,7 +10,7 @@
     function stateConfig($stateProvider) {
         $stateProvider.state('filler', {
             parent: 'app',
-            url: '/',
+            url: '/:gameId',
             data: {
                 authorities: []
             },
