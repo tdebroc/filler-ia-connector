@@ -6,6 +6,8 @@ public class Game {
 
     private Grid grid;
 
+    private int idGame;
+
     private List<Player> players;
 
     private Date dateCreated;
@@ -205,5 +207,13 @@ public class Game {
 
     public void setDateCreated(Date dateCreated) {
         this.dateCreated = dateCreated;
+    }
+
+    public int getIdGame() {
+        return idGame;
+    }
+
+    public void setIdGame(int idGame) {
+        this.idGame = idGame;
     }
 }

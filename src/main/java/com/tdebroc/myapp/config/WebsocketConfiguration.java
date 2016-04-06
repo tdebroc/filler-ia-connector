@@ -39,7 +39,7 @@ public class WebsocketConfiguration extends AbstractWebSocketMessageBrokerConfig
 
     @Override
     public void registerStompEndpoints(StompEndpointRegistry registry) {
-        registry.addEndpoint("/websocket/tracker")
+        registry.addEndpoint("/websocket/filler")
             .setHandshakeHandler(new DefaultHandshakeHandler() {
                 @Override
                 protected Principal determineUser(ServerHttpRequest request, WebSocketHandler wsHandler, Map<String, Object> attributes) {
@@ -54,6 +54,8 @@ public class WebsocketConfiguration extends AbstractWebSocketMessageBrokerConfig
             })
             .withSockJS()
             .setInterceptors(httpSessionHandshakeInterceptor());
+
+
     }
 
     @Bean
