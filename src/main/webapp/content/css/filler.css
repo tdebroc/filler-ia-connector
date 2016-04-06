@@ -19,11 +19,12 @@
     width: 100%;
 }
 
-#filler-table-grid td, .filler-cell{
+#filler-table-grid td, .filler-cell {
     color: grey;
     font-weight: bold;
     text-align: center;
     padding: 5px;
+    min-width: 19px;
 }
 
 #filler-list md-list-item {

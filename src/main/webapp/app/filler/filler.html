@@ -24,9 +24,14 @@
         <md-card-content layout="row" layout-align="space-between">
             <div class="card-media">
                 <table id="filler-table-grid">
-                    <tr ng-repeat="line in currentGame.grid.grid">
-                        <td ng-repeat="cell in line" ng-style="{'background-color': getColor(cell.color)}">
-                           {{cell.color}}
+                    <tr ng-repeat="line in currentGame.grid.grid" ng-init="x = $index; last = currentGame.grid.grid.length - 1">
+                        <td ng-repeat="cell in line" ng-style="{'background-color': getColor(cell.color)}" ng-init="y = $index">
+                            <span ng-if="x == 0 && y == 0 && currentGame.players.length > 0">1</span>
+                            <span ng-else-if="x == last && y == last && currentGame.players.length > 1">2</span>
+                            <span ng-else-if="x == 0 && y == last && currentGame.players.length > 2">3</span>
+                            <span ng-else-if="x == last && y == 0 && currentGame.players.length > 3">4</span>
+                            <span ng-else-if="displayCharColor">{{cell.color}}</span>
+                            <span ng-else>&nbsp;&nbsp;&nbsp;</span>
                         </td>
                     </tr>
                 </table>
@@ -39,6 +44,10 @@
                 <md-button class="md-icon-button" aria-label="Start" ng-click="startGame(currentIdGame)">
                     <i class="material-icons" ng-style="{'color' : currentGame.started ? 'green' : ''}">play_circle_filled</i>
                 </md-button>
+                <md-button class="md-icon-button" aria-label="Start" ng-click="displayCharColor = !displayCharColor" ng-init="displayCharColor = true">
+                    <i class="material-icons">invert_colors</i>
+                </md-button>
+
             </md-card-actions>
         </md-card-content>
         <md-card-content>
