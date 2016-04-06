@@ -73,8 +73,12 @@
             </div>
             <br/>
             <md-button ng-if="!currentGame.started" class="md-raised md-primary" aria-label="Add Game" ng-click="addPlayer(currentIdGame)">
-                <i class="material-icons" >person_add</i>
+                <md-icon class="material-icons" >person_add</md-icon>
                 Add player
+            </md-button>
+            <md-button ng-if="!currentGame.started" class="md-raised md-primary" aria-label="Start Game" ng-click="startGame(currentIdGame)">
+                <md-icon class="material-icons" >play_circle_filled</md-icon>
+                Star Game
             </md-button>
         </md-card-content>
     </md-card>
