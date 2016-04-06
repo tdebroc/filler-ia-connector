@@ -87,11 +87,11 @@
         $scope.addPlayer = function(idGame) {
             var idPlayerTurn = $scope.currentGame.players.length;
             FillerService.addPlayer(idGame).then(function(response) {
-                console.log(response.data)
-                var idPlayerTurn = response.data.idPlayer;
+                var playerInstance = JSON.parse(response.data)
+                var idPlayerTurn = playerInstance.idPlayer;
                 var key = getKey(idGame, idPlayerTurn);
-                $scope.currentPlayers[key] = response.data.UUID;
-
+                $scope.currentPlayers[key] = playerInstance.UUID;
+                console.log("$scope.currentPlayers", $scope.currentPlayers)
                 localStorage.setItem("currentPlayers", JSON.stringify($scope.currentPlayers));
             });
         }
