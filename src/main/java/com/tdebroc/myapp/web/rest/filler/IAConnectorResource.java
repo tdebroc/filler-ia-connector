@@ -79,7 +79,6 @@ public class IAConnectorResource {
 
     @RequestMapping(method = RequestMethod.GET, value = "/game")
     public ResponseEntity<Game> game(@RequestParam(value = "idGame") int idGame) throws URISyntaxException {
-        refreshGame(gamesMap.get(2));
         return new ResponseEntity<>(gamesMap.get(idGame), HttpStatus.OK);
     }
 
