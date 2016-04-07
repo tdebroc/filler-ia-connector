@@ -4,6 +4,8 @@ import java.util.*;
 
 public class Game {
 
+    public static final int MAX_NUM_PLAYER = 4;
+
     private Grid grid;
 
     private int idGame;
@@ -33,20 +35,28 @@ public class Game {
     }
 
     public void addPlayer() {
+        addPlayer(Player.PLAYER_NAME_DEFAULT);
+    }
+
+    public void addPlayer(String playerName) {
         if (getPlayers().size() == 0) {
-            addPlayer(0, 0);
+            addPlayer(0, 0, playerName);
         } else if (getPlayers().size() == 1) {
-            addPlayer(getGrid().getGrid().length -1, getGrid().getGrid().length -1);
+            addPlayer(getGrid().getGrid().length -1, getGrid().getGrid().length -1, playerName);
         } else if (getPlayers().size() == 2) {
-            addPlayer(0, getGrid().getGrid().length -1);
+            addPlayer(0, getGrid().getGrid().length -1, playerName);
         } else if (getPlayers().size() == 3) {
-            addPlayer(getGrid().getGrid().length -1, 0);
+            addPlayer(getGrid().getGrid().length -1, 0, playerName);
         }
     }
 
-    public void addPlayer(int x, int y) {
+    public void addPlayer(int x, int y, String playerName) {
+        if (playerName == null) {
+            playerName = Player.PLAYER_NAME_DEFAULT;
+        }
         Position position = new Position(x, y);
         Player player = new Player();
+        player.setPlayerName(playerName);
         player.setInitPosition(position);
         player.setPlayerColor(getGrid().getCell(x, y).getColor());
         getPlayers().add(player);

@@ -1,7 +1,7 @@
 package com.tdebroc.filler.game;
 
 
-import com.tdebroc.filler.connector.Connector;
+import com.tdebroc.filler.connector.PlayerConnector;
 import com.tdebroc.filler.game.ia.ManualIA;
 
 public class Main {
@@ -16,19 +16,19 @@ public class Main {
 
     public static void ManualIAVsOther() {
 
-        int gameId = Connector.addGame(baseUrl, 5);
+        int gameId = PlayerConnector.addGame(baseUrl, 5);
         System.out.println("Open a new game is " + gameId);
 
-        Connector connector1 = new Connector(gameId, baseUrl);
-        connector1.registerPlayer();
+        PlayerConnector playerConnector1 = new PlayerConnector(gameId, baseUrl);
+        playerConnector1.registerPlayer("Carl");
         Game game;
 
         ManualIA manualIA = new ManualIA();
 
         do {
-            game = connector1.getOpponentMoves();
+            game = playerConnector1.getOpponentMoves();
             char c = manualIA.getNextMove(game);
-            connector1.sendMove(c);
+            playerConnector1.sendMove(c);
 
         } while (!game.isFinished());
 
@@ -36,16 +36,16 @@ public class Main {
 
     public static void SimpleIAVSManual(String[] args) {
 
-        int gameId = Connector.addGame(baseUrl, 5);
+        int gameId = PlayerConnector.addGame(baseUrl, 5);
 
-        Connector connector1 = new Connector(gameId, baseUrl);
-        connector1.registerPlayer();
+        PlayerConnector playerConnector1 = new PlayerConnector(gameId, baseUrl);
+        playerConnector1.registerPlayer("Bob");
         ManualIA manualIA = new ManualIA();
 
-        Connector connector2 = new Connector(gameId, baseUrl);
-        connector2.registerPlayer();
+        PlayerConnector playerConnector2 = new PlayerConnector(gameId, baseUrl);
+        playerConnector2.registerPlayer("Anna");
 
-        Game game = connector1.getGame();
+        Game game = playerConnector1.getGame();
 
         while (!game.isFinished()) {
 

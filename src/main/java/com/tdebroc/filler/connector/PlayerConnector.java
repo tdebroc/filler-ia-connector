@@ -8,7 +8,7 @@ import java.io.InputStreamReader;
 import java.net.HttpURLConnection;
 import java.net.URL;
 
-public class Connector {
+public class PlayerConnector {
 
 	private int gameId;
 
@@ -19,16 +19,16 @@ public class Connector {
     private PlayerInstance playerInstance;
 
 
-    public Connector(int gameId) {
+    public PlayerConnector(int gameId) {
         this.gameId = gameId;
     }
-	public Connector(int gameId, String baseUrl) {
+	public PlayerConnector(int gameId, String baseUrl) {
 		this.setGameId(gameId);
         this.baseUrl = baseUrl;
 	}
 
 	public static void main(String[] args) throws Exception {
-        Connector c = new Connector(1, "http://localhost:8080");
+        PlayerConnector c = new PlayerConnector(1, "http://localhost:8080");
 		System.out.println(c.getGame());
 	}
 
@@ -36,10 +36,12 @@ public class Connector {
         return (int) sentGetAndDeserialize(baseUrl + "/iaconnector/addGame?gridSize=" + gridSize, Integer.class);
     }
 
-    public void registerPlayer() {
+    public void registerPlayer(String playerName) {
         try {
             playerInstance = (PlayerInstance)
-                sentGetAndDeserialize(baseUrl + "/iaconnector/addPlayer?idGame=" + gameId, PlayerInstance.class);
+                sentGetAndDeserialize(
+                    baseUrl + "/iaconnector/addPlayer?idGame=" + gameId + "&playerName=" + playerName,
+                    PlayerInstance.class);
             playerUUID = playerInstance.UUID;
             System.out.println("Player has been registered. Player UUID is " + playerUUID);
         } catch (Exception e) {

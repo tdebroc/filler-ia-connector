@@ -6,7 +6,11 @@ public class Player {
 
 	private char playerColor;
 
+    private String playerName;
+
 	private int score;
+
+    public final static String PLAYER_NAME_DEFAULT = "Anonymous";
 
 	public char getPlayerColor() {
 		return playerColor;
@@ -31,4 +35,12 @@ public class Player {
 	public void setScore(int score) {
 		this.score = score;
 	}
+
+    public String getPlayerName() {
+        return playerName;
+    }
+
+    public void setPlayerName(String playerName) {
+        this.playerName = playerName;
+    }
 }

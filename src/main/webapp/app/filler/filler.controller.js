@@ -114,7 +114,8 @@
 
         $scope.addPlayer = function(idGame) {
             var idPlayerTurn = $scope.currentGame.players.length;
-            FillerService.addPlayer(idGame).then(function(response) {
+            var newPlayerName = $("#newPlayerName").val()
+            FillerService.addPlayer(idGame, newPlayerName).then(function(response) {
                 var playerInstance = JSON.parse(response.data)
                 var idPlayerTurn = playerInstance.idPlayer;
                 var key = getKey(idGame, idPlayerTurn);

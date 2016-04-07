@@ -118,9 +118,10 @@ public class IAConnectorResource {
 
 
     @RequestMapping(method = RequestMethod.GET, value = "/addPlayer")
-    public ResponseEntity<PlayerInstance> addPlayer(@RequestParam(value = "idGame") int idGame) throws URISyntaxException {
+    public ResponseEntity<PlayerInstance> addPlayer(@RequestParam(value = "idGame") int idGame,
+                                                    @RequestParam(value = "playerName", required = false) String playerName) throws URISyntaxException {
         Game game = gamesMap.get(idGame);
-        if (game.isStarted() || game.getPlayers().size() >= 4) {
+        if (game.isStarted() || game.getPlayers().size() >= Game.MAX_NUM_PLAYER) {
             return null;
         }
         String userId;
@@ -129,7 +130,7 @@ public class IAConnectorResource {
         } while (playersInstances.containsKey(userId));
 
         PlayerInstance playerInstance = new PlayerInstance(idGame, game.getPlayers().size(), userId);
-        game.addPlayer();
+        game.addPlayer(playerName);
         refreshGame(game);
         playersInstances.put(userId, playerInstance);
         return new ResponseEntity<>(playerInstance, HttpStatus.OK);
@@ -140,7 +141,7 @@ public class IAConnectorResource {
     public ResponseEntity<MessageResponse> sendMove(@RequestParam(value = "playerUUID") String playerUUID,
                                             @RequestParam(value = "color") char color) throws URISyntaxException {
         PlayerInstance playerInstance = playersInstances.get(playerUUID);
-        if (playerInstance == null) {
+        if (!playersInstances.containsKey(playerUUID)) {
             return sendMessage("Unknown player", null);
         }
         Game game = gamesMap.get(playerInstance.idGame);

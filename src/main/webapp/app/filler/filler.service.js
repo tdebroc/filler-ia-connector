@@ -24,9 +24,13 @@
              addGame : function(gridSize) {
                 return $http.get('iaconnector/addGame?gridSize=' + gridSize);
              },
-             addPlayer : function(idGame) {
+             addPlayer : function(idGame, newPlayerName) {
+                var url = 'iaconnector/addPlayer?idGame=' + idGame
+                 if (newPlayerName) {
+                    url += "&playerName=" + newPlayerName;
+                 }
                 return $http({
-                   'url' : 'iaconnector/addPlayer?idGame=' + idGame,
+                   'url' : url,
                    method: 'GET',
                    transformResponse: [function (data) {
                          // Do whatever you want!

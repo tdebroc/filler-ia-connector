@@ -65,7 +65,7 @@
             Turn of Player {{currentGame.currentIdPlayerTurn + 1}} <br/>
             <div ng-repeat="player in currentGame.players"  ng-init="idPlayerTurn = $index">
                 <span ng-style="{'background-color': getColor(player.playerColor)}">
-                    Player {{$index + 1}} : {{player.playerColor}}
+                    Player {{$index + 1}} : {{player.playerName}}
                 </span>
 
                 <span>
@@ -81,7 +81,6 @@
                                 <td class="filler-cell-color-select"
                                     ng-repeat="(key,color) in availableColor(currentGame)"
                                     ng-style="{'background-color' : color}" class="filler-cell"
-
                                     ng-click="sendMove(key, currentIdGame, idPlayerTurn)"> &nbsp;{{key}} &nbsp;</td>
                             </tr>
                         </table>
@@ -90,10 +89,17 @@
 
             </div>
             <br/>
-            <md-button ng-if="!currentGame.started" class="md-raised md-primary" aria-label="Add Game" ng-click="addPlayer(currentIdGame)">
-                <i class="material-icons" >person_add</i>
-                Add player
-            </md-button>
+            <legend ng-if="!currentGame.started">
+                <md-input-container>
+                    <label>New player name</label>
+                    <input ng-model="newPlayerName" type="text" id="newPlayerName">
+                </md-input-container>
+                <md-button  class="md-raised md-primary" aria-label="Add Player" ng-click="addPlayer(currentIdGame)">
+                    <i class="material-icons" >person_add</i>
+                    Add player
+                </md-button>
+            </legend>
+
             <md-button ng-if="!currentGame.started" class="md-raised md-primary" aria-label="Start Game" ng-click="startGame(currentIdGame)">
                 <md-icon class="material-icons" >play_circle_filled</md-icon>
                 Star Game
