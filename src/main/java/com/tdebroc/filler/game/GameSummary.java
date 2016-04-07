@@ -9,13 +9,14 @@ public class GameSummary {
 
     private Date dateCreated;
 
+    private int idGame;
 
-    public GameSummary() {
+
+    public GameSummary(Game game) {
+        dateCreated = game.getDateCreated();
+        idGame = game.getIdGame();
     }
 
-    public GameSummary(Date dateCreated) {
-        this.dateCreated = dateCreated;
-    }
 
     public Date getDateCreated() {
         return dateCreated;
@@ -25,4 +26,11 @@ public class GameSummary {
         this.dateCreated = dateCreated;
     }
 
+    public int getIdGame() {
+        return idGame;
+    }
+
+    public void setIdGame(int idGame) {
+        this.idGame = idGame;
+    }
 }

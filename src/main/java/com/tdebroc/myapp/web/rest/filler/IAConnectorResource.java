@@ -102,7 +102,7 @@ public class IAConnectorResource {
     private Map<Integer,GameSummary> buildGamesSummarized() {
         Map<Integer, GameSummary> gamesSummarized = new HashMap<Integer, GameSummary>();
         for (Integer key : gamesMap.keySet()) {
-            gamesSummarized.put(key, new GameSummary(gamesMap.get(key).getDateCreated()));
+            gamesSummarized.put(key, new GameSummary(gamesMap.get(key)));
         }
         return gamesSummarized;
     }
@@ -140,6 +140,9 @@ public class IAConnectorResource {
     public ResponseEntity<MessageResponse> sendMove(@RequestParam(value = "playerUUID") String playerUUID,
                                             @RequestParam(value = "color") char color) throws URISyntaxException {
         PlayerInstance playerInstance = playersInstances.get(playerUUID);
+        if (playerInstance == null) {
+            return sendMessage("Unknown player", null);
+        }
         Game game = gamesMap.get(playerInstance.idGame);
         if (game.getCurrentIdPlayerTurn() != playerInstance.idPlayer) {
             return sendMessage("It's not the turn of player " + (playerInstance.idPlayer + 1), null);
@@ -159,6 +162,9 @@ public class IAConnectorResource {
     @RequestMapping(method = RequestMethod.GET, value = "/getOpponentMoves")
     public ResponseEntity<Game> getOpponentMoves(@RequestParam(value = "playerUUID") String playerUUID) throws URISyntaxException, InterruptedException {
         PlayerInstance playerInstance = playersInstances.get(playerUUID);
+        if (playerInstance == null) {
+            return null;
+        }
         Game game = gamesMap.get(playerInstance.idGame);
         int timeRequest = 0;
         while (game.getCurrentIdPlayerTurn() != playerInstance.idPlayer || !game.isStarted()) {

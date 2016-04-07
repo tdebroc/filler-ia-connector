@@ -1,14 +1,23 @@
 <div ng-cloak id="filler-content">
 
-    <md-list id="filler-list">
-        <md-button class="md-raised md-primary" aria-label="Add Game" ng-click="addGameModal()">
+    <div class="filler-list-overtop">
+        <md-button class="md-raised md-primary filler-addGame-button" aria-label="Add Game" ng-click="addGameModal()">
             <md-icon md-font-library="material-icons" >add</md-icon>
             add Game
-        </md-button>
+        </md-button><br/>
+        <md-input-container>
+            <label>Find Game</label>
+            <input ng-model="searchIdGame" type="number">
+        </md-input-container>
+    </div>
+    <md-list id="filler-list">
 
-        <md-list-item class="md-3-line" ng-repeat="(key, game) in games track by key" ng-click="selectGame(key)" >
+        <md-list-item class="md-3-line"
+                      ng-repeat="game in toArray(games) | orderBy : idGame : true"
+                      ng-click="selectGame(game.idGame)"
+            ng-hide="searchIdGame && searchIdGame != game.idGame">
             <p>
-                Game {{key}}<br/>
+                Game {{game.idGame}}<br/>
                 {{game.dateCreated  | date:'short'}}
             </p>
             <md-divider></md-divider>
@@ -24,14 +33,11 @@
         <md-card-content layout="row" layout-align="space-between">
             <div class="card-media">
                 <table id="filler-table-grid">
-                    <tr ng-repeat="line in currentGame.grid.grid" ng-init="x = $index; last = currentGame.grid.grid.length - 1">
-                        <td ng-repeat="cell in line" ng-style="{'background-color': getColor(cell.color)}" ng-init="y = $index">
-                            <span ng-if="x == 0 && y == 0 && currentGame.players.length > 0">1</span>
-                            <span ng-else-if="x == last && y == last && currentGame.players.length > 1">2</span>
-                            <span ng-else-if="x == 0 && y == last && currentGame.players.length > 2">3</span>
-                            <span ng-else-if="x == last && y == 0 && currentGame.players.length > 3">4</span>
-                            <span ng-else-if="displayCharColor">{{cell.color}}</span>
-                            <span ng-else>&nbsp;&nbsp;&nbsp;</span>
+                    <tr ng-repeat="line in currentGame.grid.grid" ng-init="x = $index;">
+                        <td ng-repeat="cell in line" ng-style="{'background-color': getColor(cell.color)}"
+                            ng-click="sendMove(cell.color, currentIdGame, currentGame.currentIdPlayerTurn)"
+                            ng-init="y = $index">
+                            <span ng-bind-html="displayPlayer(x, y, currentGame, cell.color)"></span>
                         </td>
                     </tr>
                 </table>
@@ -44,7 +50,7 @@
                 <md-button class="md-icon-button" aria-label="Start" ng-click="startGame(currentIdGame)">
                     <i class="material-icons" ng-style="{'color' : currentGame.started ? 'green' : ''}">play_circle_filled</i>
                 </md-button>
-                <md-button class="md-icon-button" aria-label="Start" ng-click="displayCharColor = !displayCharColor" ng-init="displayCharColor = true">
+                <md-button class="md-icon-button" aria-label="Start" ng-click="displayCharColor = !displayCharColor" ng-init="displayCharColor = false">
                     <i class="material-icons">invert_colors</i>
                 </md-button>
 
@@ -60,22 +66,28 @@
             <div ng-repeat="player in currentGame.players"  ng-init="idPlayerTurn = $index">
                 <span ng-style="{'background-color': getColor(player.playerColor)}">
                     Player {{$index + 1}} : {{player.playerColor}}
-                </span>, init position: {{player.initPosition}}
+                </span>
+
+                <span>
+                &nbsp;{{countPoints(currentGame, currentGame.players[idPlayerTurn].playerColor)}} Points
+                </span>
 
                 <span ng-if="isCurrentPlayer(currentIdGame, idPlayerTurn)">
                     <i class="material-icons">person</i>
                     <span ng-if="isPlayerTurn(currentGame, idPlayerTurn)">
-                        It's your turn, choose color:
+                        It's your turn, Choose color:
                         <table>
                             <tr>
-                                <td ng-repeat="(key,color) in mapColor"
+                                <td class="filler-cell-color-select"
+                                    ng-repeat="(key,color) in availableColor(currentGame)"
                                     ng-style="{'background-color' : color}" class="filler-cell"
-                                    ng-click="sendMove(key, currentIdGame, idPlayerTurn)"> {{key}} </td>
+
+                                    ng-click="sendMove(key, currentIdGame, idPlayerTurn)"> &nbsp;{{key}} &nbsp;</td>
                             </tr>
                         </table>
                     </span>
                 </span>
-                ({{countPoints(currentGame, currentGame.players[idPlayerTurn].playerColor)}} Points)
+
             </div>
             <br/>
             <md-button ng-if="!currentGame.started" class="md-raised md-primary" aria-label="Add Game" ng-click="addPlayer(currentIdGame)">

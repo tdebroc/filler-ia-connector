@@ -6,10 +6,10 @@
         .controller('FillerController', FillerController);
 
     FillerController.$inject = ['$scope', 'Principal', 'LoginService', 'FillerService', '$mdDialog',
-            '$timeout', '$interval', 'FillerSocketService', '$stateParams'];
+            '$timeout', '$interval', 'FillerSocketService', '$stateParams', '$sce'];
 
     function FillerController ($scope, Principal, LoginService, FillerService, $mdDialog, $timeout,
-                                $interval, FillerSocketService, $stateParams) {
+                                $interval, FillerSocketService, $stateParams, $sce) {
 
         $scope.currentPlayers = {};
         function loadCurrentPlayers() {
@@ -38,6 +38,7 @@
         FillerSocketService.receive().then(null, null, function(game) {
             if (game.idGame == $scope.currentIdGame) {
                 $scope.currentGame = game;
+                $scope.selectGame($scope.currentIdGame)
             }
         });
         FillerSocketService.subscribe();
@@ -52,6 +53,7 @@
         $scope.refreshGames = function() {
             $scope.games = FillerService.getGames(function(response) {
                 $scope.games = response.data;
+                $scope.selectGame($stateParams.gameId)
             });
         }
         $scope.refreshGames();
@@ -59,7 +61,9 @@
 
         var gameRefresher;
         $scope.selectGame = function(idGame) {
-            $scope.currentIdGame = idGame && idGame.length > 0 ? idGame : 1;
+            var keys = Object.keys($scope.games);
+            var idGameLast = $scope.games[keys[keys.length - 1]].idGame
+            $scope.currentIdGame = idGame && idGame > 0 ? idGame : idGameLast;
             if (gameRefresher) {
                 $interval.cancel(gameRefresher);
             }
@@ -75,7 +79,31 @@
         }
         // Start
         if (!$scope.currentGame) {
-            $scope.selectGame($stateParams.gameId);
+            //$scope.selectGame($stateParams.gameId);
+        }
+
+        $scope.displayPlayer = function(x, y, currentGame, color) {
+            for (var i = 0;i < currentGame.players.length; i++) {
+                var pos = currentGame.players[i].initPosition;
+                if (pos.x == x && pos.y == y) {
+                    return i + 1;
+                }
+            }
+            return $scope.displayCharColor ? color : $sce.trustAsHtml("&nbsp;&nbsp;&nbsp;");
+        }
+
+        $scope.availableColor = function(currentGame) {
+            var colors = {};
+            for (var c in  $scope.mapColor) {
+                colors[c] = $scope.mapColor[c];
+
+            }
+            //console.log(colors);
+            for (var i = 0; i < currentGame.players.length; i++) {
+                delete colors[currentGame.players[i].playerColor];
+            }
+
+            return colors;
         }
         //=====================================================================
         // Play Game
@@ -91,7 +119,6 @@
                 var idPlayerTurn = playerInstance.idPlayer;
                 var key = getKey(idGame, idPlayerTurn);
                 $scope.currentPlayers[key] = playerInstance.UUID;
-                console.log("$scope.currentPlayers", $scope.currentPlayers)
                 localStorage.setItem("currentPlayers", JSON.stringify($scope.currentPlayers));
             });
         }
@@ -175,17 +202,34 @@
             $mdDialog.show(confirm).then(function() {
                 delete $scope.games[$scope.currentIdGame];
                 FillerService.removeGame($scope.currentIdGame);
-                $scope.selectGame(1);
+                $scope.selectGame();
             }, function() {
               $scope.status = 'You decided to keep your debt.';
             });
           };
 
+
+
         //=====================================================================
         // Fix width in smartphone
         //=====================================================================
+        function refreshHeight() {
+            setTimeout(function() {
+                $("#filler-list").height($(window).height() - $("#filler-list").offset().top - 60);
+            }, 100)
+        }
+        $(window).resize(refreshHeight);
+        $(document).ready(refreshHeight)
 
-        // $("html").width($(window).width());
-
+        //=====================================================================
+        // Fix width in smartphone
+        //=====================================================================
+        $scope.toArray = function(obj) {
+            var arr = []
+            for (var key in obj) {
+                arr.push(obj[key]);
+            }
+            return arr;
+        }
     }
 })();
