@@ -21,15 +21,12 @@ public class Customer {
 
     private String lastName;
 
-    private Cell cell;
-
     protected Customer() {}
 
     public Customer(String firstName, String lastName) {
         this.id = ID_INCREMENT++;
         this.firstName = firstName;
         this.lastName = lastName;
-        this.cell = new  Cell('E');
     }
 
     @Override
@@ -63,11 +60,4 @@ public class Customer {
         this.lastName = lastName;
     }
 
-    public Cell getCell() {
-        return cell;
-    }
-
-    public void setCell(Cell cell) {
-        this.cell = cell;
-    }
 }
