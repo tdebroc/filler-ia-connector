@@ -5,6 +5,9 @@ import com.tdebroc.filler.connector.PlayerInstance;
 import com.tdebroc.filler.game.Colors;
 import com.tdebroc.filler.game.Game;
 import com.tdebroc.filler.game.GameSummary;
+import com.tdebroc.myapp.repository.Customer;
+import com.tdebroc.myapp.repository.CustomerRepository;
+import org.slf4j.LoggerFactory;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
@@ -24,6 +27,8 @@ import java.util.*;
 @RequestMapping(value = "/iaconnector", produces = MediaType.APPLICATION_JSON_VALUE)
 public class IAConnectorResource {
 
+    private static final org.slf4j.Logger log = LoggerFactory.getLogger(IAConnectorResource.class);
+
     @Inject
     SimpMessageSendingOperations messagingTemplate;
 
@@ -32,6 +37,9 @@ public class IAConnectorResource {
     public static Map<Integer, Game> gamesMap = new HashMap<>();
 
     public static Map<String, PlayerInstance> playersInstances = new HashMap<>();
+
+    @Inject
+    CustomerRepository repository;
 
     public IAConnectorResource() throws URISyntaxException {
         addGameToGamesMap(13);
@@ -42,6 +50,25 @@ public class IAConnectorResource {
         PlayerInstance playerInstance2 = new PlayerInstance(1, game.getPlayers().size(), "124");
         game.addPlayer();
         playersInstances.put("124", playerInstance2);
+    }
+
+
+    @RequestMapping(method = RequestMethod.GET, value = "/test")
+    public int test() throws URISyntaxException {
+        repository.save(new Customer("Jack", "Bauer"));
+        repository.save(new Customer("Chloe", "O'Brian"));
+        repository.save(new Customer("Kim", "Bauer"));
+        repository.save(new Customer("David", "Palmer"));
+        repository.save(new Customer("Michelle", "Dessler"));
+
+        // fetch all customers
+        log.info("Customers found with findAll():");
+        log.info("-------------------------------");
+        for (Customer customer : repository.findAll()) {
+            log.info(customer.toString());
+        }
+        log.info("");
+        return 3;
     }
 
     public int addGameToGamesMap(int gridSize) {
@@ -121,7 +148,8 @@ public class IAConnectorResource {
     public ResponseEntity<PlayerInstance> addPlayer(@RequestParam(value = "idGame") int idGame,
                                                     @RequestParam(value = "playerName", required = false) String playerName) throws URISyntaxException {
         Game game = gamesMap.get(idGame);
-        if (game.isStarted() || game.getPlayers().size() >= Game.MAX_NUM_PLAYER) {
+        if (game.isStarted() ||
+            game.getPlayers().size() >= Game.MAX_NUM_PLAYER) {
             return null;
         }
         String userId;
@@ -144,9 +172,9 @@ public class IAConnectorResource {
         if (!playersInstances.containsKey(playerUUID)) {
             return sendMessage("Unknown player", null);
         }
-        Game game = gamesMap.get(playerInstance.idGame);
-        if (game.getCurrentIdPlayerTurn() != playerInstance.idPlayer) {
-            return sendMessage("It's not the turn of player " + (playerInstance.idPlayer + 1), null);
+        Game game = gamesMap.get(playerInstance.getIdGame());
+        if (game.getCurrentIdPlayerTurn() != playerInstance.getIdPlayer()) {
+            return sendMessage("It's not the turn of player " + (playerInstance.getIdPlayer() + 1), null);
         }
         if (!Colors.isExistingColor(color)) {
             return sendMessage("Color " + color + " is invalid (not in the list).", null);
@@ -154,7 +182,7 @@ public class IAConnectorResource {
         if (Colors.isTakenColor(color, game.getPlayers())) {
             return sendMessage("Color " + color + " has been taken by another opponent.", null);
         }
-        game.playColor(game.getPlayers().get(playerInstance.idPlayer), color);
+        game.playColor(game.getPlayers().get(playerInstance.getIdPlayer()), color);
         refreshGame(game);
         return sendMessage(null, "OK");
     }
@@ -166,9 +194,9 @@ public class IAConnectorResource {
         if (playerInstance == null) {
             return null;
         }
-        Game game = gamesMap.get(playerInstance.idGame);
+        Game game = gamesMap.get(playerInstance.getIdGame());
         int timeRequest = 0;
-        while (game.getCurrentIdPlayerTurn() != playerInstance.idPlayer || !game.isStarted()) {
+        while (game.getCurrentIdPlayerTurn() != playerInstance.getIdPlayer() || !game.isStarted()) {
 
             Thread.sleep(100);
             timeRequest += 100;

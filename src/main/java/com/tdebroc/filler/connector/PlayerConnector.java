@@ -28,7 +28,7 @@ public class PlayerConnector {
 	}
 
 	public static void main(String[] args) throws Exception {
-        PlayerConnector c = new PlayerConnector(1, "http://localhost:8080");
+        PlayerConnector c = new PlayerConnector(2, "http://localhost:8080");
 		System.out.println(c.getGame());
 	}
 
@@ -42,7 +42,7 @@ public class PlayerConnector {
                 sentGetAndDeserialize(
                     baseUrl + "/iaconnector/addPlayer?idGame=" + gameId + "&playerName=" + playerName,
                     PlayerInstance.class);
-            playerUUID = playerInstance.UUID;
+            playerUUID = playerInstance.getUUID();
             System.out.println("Player has been registered. Player UUID is " + playerUUID);
         } catch (Exception e) {
             System.err.println("There was an error while registering player.");

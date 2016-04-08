@@ -119,7 +119,7 @@
                 var playerInstance = JSON.parse(response.data)
                 var idPlayerTurn = playerInstance.idPlayer;
                 var key = getKey(idGame, idPlayerTurn);
-                $scope.currentPlayers[key] = playerInstance.UUID;
+                $scope.currentPlayers[key] = playerInstance.UUID || playerInstance.uuid;
                 localStorage.setItem("currentPlayers", JSON.stringify($scope.currentPlayers));
             });
         }
