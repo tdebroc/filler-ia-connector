@@ -24,6 +24,10 @@ public class Game {
 
     static final int DEFAULT_GRID_SIZE = 4;
 
+    Position[] increments = new Position[]{
+        new Position(1,0), new Position(0,1),new Position(-1,0),new Position(0,-1)
+    };
+
     public void initGame() {
         initGame(DEFAULT_GRID_SIZE);
     }
@@ -96,6 +100,7 @@ public class Game {
             currentIdPlayerTurn = 0;
             round++;
         }
+        calculateScore(currentPlayer);
         determineIfGameIsFinished();
     }
 
@@ -118,11 +123,6 @@ public class Game {
         }
         getGrid().getCell(pos).setColor(c);
 
-
-        Position[] increments = new Position[]{
-            new Position(1,0), new Position(0,1),new Position(-1,0),new Position(0,-1)
-        };
-
         for (Position increment: increments) {
             int x = pos.getX() + increment.getX();
             int y = pos.getY() + increment.getY();
@@ -132,15 +132,46 @@ public class Game {
         }
     }
 
-    public boolean determineIfGameIsFinished() {
-        Set<Character> colors = new HashSet<Character>();
-        for (int i = 0; i < getGrid().getGrid().length; i++) {
-            for (int j = 0; j < getGrid().getGrid()[i].length; j++) {
-                colors.add(getGrid().getCell(i, j).getColor());
+
+    public void calculateScore(Player currentPlayer) {
+        currentPlayer.setScore(0);
+        Set<Position> visited = new HashSet<Position>();
+        Position pos = currentPlayer.getInitPosition();
+        calculateScore(currentPlayer, pos, visited);
+    }
+
+
+    private void calculateScore(Player currentPlayer, Position pos, Set<Position> visited) {
+        if (visited.contains(pos)) {
+            return;
+        }
+        visited.add(pos);
+        if (getGrid().getCell(pos).getColor() != currentPlayer.getPlayerColor()) {
+            return;
+        }
+        currentPlayer.setScore(currentPlayer.getScore() + 1);
+        getGrid().getCell(pos).setControlled(true);
+
+        for (Position increment: increments) {
+            int x = pos.getX() + increment.getX();
+            int y = pos.getY() + increment.getY();
+            if (x >= 0 && x < getGrid().getGrid().length && y >= 0 && y < getGrid().getGrid()[0].length) {
+                calculateScore(currentPlayer, new Position(x, y), visited);
             }
         }
-        setFinished(colors.size() == getPlayers().size());
-        return colors.size() == getPlayers().size();
+    }
+
+
+    public boolean determineIfGameIsFinished() {
+        for (int i = 0; i < getGrid().getGrid().length; i++) {
+            for (int j = 0; j < getGrid().getGrid()[i].length; j++) {
+                if (!getGrid().getCell(i, j).isControlled()) {
+                    return false;
+                }
+            }
+        }
+        finished = true;
+        return true;
     }
 
     public void displayWinner() {

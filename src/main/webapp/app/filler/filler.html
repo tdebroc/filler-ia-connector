@@ -69,7 +69,9 @@
                 </span>
 
                 <span>
-                &nbsp;{{countPoints(currentGame, currentGame.players[idPlayerTurn].playerColor)}} Points
+                    {{currentGame.players[idPlayerTurn].score}} Points
+                    &nbsp; ({{countPoints(currentGame, currentGame.players[idPlayerTurn].playerColor)}}
+                    {{getColor(currentGame.players[idPlayerTurn].playerColor)}})
                 </span>
 
                 <span ng-if="isCurrentPlayer(currentIdGame, idPlayerTurn)">
