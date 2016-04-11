@@ -238,13 +238,13 @@
         // FILLER
         //=====================================================================
 
-        var FILLER = "BBBBBBBBBBBBBBBBBBBBBBBBB " +
-                     "BVVVBVBVBBBVBBBVVVBVVVVBB " +
-                     "BVBBBVBVBBBVBBBVBBBVBBBVB " +
-                     "BVVBBVBVBBBVBBBVVBBVVVVBB " +
-                     "BVBBBVBVBBBVBBBVBBBVBVBBB " +
-                     "BVBBBVBVVVBVVVBVVVBVBBVBB " +
-                     "BBBBBBBBBBBBBBBBBBBBBBBBB ";
+        var FILLER = "JOOOOJOOOROOOROOBOOOOOOOJ " +
+                     "OVVVOVOVOOOVOOOVVVOVVVVRO " +
+                     "OVOJOVOVOBOVOOOVOOOVOOOVO " +
+                     "OVVOOVOVOOOVOOOVVOOVVVVOO " +
+                     "OVOOOVOVOOOVJJOVOOOVOVOOO " +
+                     "OVOJOVOVVVOVVVOVVVOVOOVOO " +
+                     "JOOBOOOOOOOOOOOOBOOOOOOJO ";
         var gameMainPage = {};
         gameMainPage.grid = { grid : []};
         gameMainPage.players = []
