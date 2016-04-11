@@ -30,8 +30,8 @@
     <div class="container">
         <div class="well" ui-view="content"></div>
 
-        <div class="footer" ng-cloak>
-
+        <div class="footer well" ng-cloak style="text-align: center">
+            Please report any feedback to tdebroc@gmail.com
         </div>
     </div>
 
@@ -79,10 +79,10 @@
     <!-- build:js app/app.js  -->
     <!-- inject:js -->
     <script src="app/app.module.js"></script>
-    <script src="app/account/reset/request/reset.request.state.js"></script>
-    <script src="app/account/reset/request/reset.request.controller.js"></script>
     <script src="app/account/reset/finish/reset.finish.state.js"></script>
     <script src="app/account/reset/finish/reset.finish.controller.js"></script>
+    <script src="app/account/reset/request/reset.request.state.js"></script>
+    <script src="app/account/reset/request/reset.request.controller.js"></script>
     <script src="app/services/user/user.service.js"></script>
     <script src="app/services/auth/sessions.service.js"></script>
     <script src="app/services/auth/register.service.js"></script>

@@ -61,12 +61,14 @@
 
         var gameRefresher;
         $scope.selectGame = function(idGame) {
+            if (!idGame || idGame == 1) {
+                $scope.currentGame = gameMainPage;
+                $scope.currentIdGame = 1;
+                return;
+            }
             var keys = Object.keys($scope.games);
             var idGameLast = $scope.games[keys[keys.length - 1]].idGame
             $scope.currentIdGame = idGame && idGame > 0 ? idGame : idGameLast;
-            if (gameRefresher) {
-                $interval.cancel(gameRefresher);
-            }
             $scope.refreshGame($scope.currentIdGame);
             //gameRefresher = $interval( $scope.refreshGame.bind(this, idGame), 1000);
         }
@@ -216,7 +218,7 @@
         //=====================================================================
         function refreshHeight() {
             setTimeout(function() {
-                $("#filler-list").height($(window).height() - $("#filler-list").offset().top - 60);
+                $("#filler-list").height($(window).height() - $("#filler-list").offset().top - 87);
             }, 100)
         }
         $(window).resize(refreshHeight);
@@ -231,6 +233,30 @@
                 arr.push(obj[key]);
             }
             return arr;
+        }
+        //=====================================================================
+        // FILLER
+        //=====================================================================
+
+        var FILLER = "BBBBBBBBBBBBBBBBBBBBBBBBB " +
+                     "BVVVBVBVBBBVBBBVVVBVVVVBB " +
+                     "BVBBBVBVBBBVBBBVBBBVBBBVB " +
+                     "BVVBBVBVBBBVBBBVVBBVVVVBB " +
+                     "BVBBBVBVBBBVBBBVBBBVBVBBB " +
+                     "BVBBBVBVVVBVVVBVVVBVBBVBB " +
+                     "BBBBBBBBBBBBBBBBBBBBBBBBB ";
+        var gameMainPage = {};
+        gameMainPage.grid = { grid : []};
+        gameMainPage.players = []
+        gameMainPage.started = true;
+        gameMainPage.finished = true;
+        var lines = FILLER.split(" ");
+        for (var i = 0; i < lines.length; i++) {
+            var line = [];
+            for (var j = 0; j < lines[i].length; j++) {
+                line.push({color : lines[i].charAt(j)})
+            }
+            gameMainPage.grid.grid.push(line);
         }
     }
 })();
