@@ -64,7 +64,7 @@ public class Game {
         player.setInitPosition(position);
         player.setPlayerColor(getGrid().getCell(x, y).getColor());
         getPlayers().add(player);
-
+        calculateScore(getPlayers().get(getPlayers().size() - 1));
     }
 
 

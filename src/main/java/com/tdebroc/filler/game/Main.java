@@ -8,21 +8,19 @@ import com.tdebroc.filler.game.ia.SimpleIA;
 
 public class Main {
 
-    static String baseUrl = "http://localhost:8080";
+    static String baseUrl = "http://62.210.105.118:8081";
 
     public static void main(String[] args) {
 
         // ManualIAVsOther();
-        onlyIA(6);
+        onlyIA(44);
     }
 
     public static void onlyIA(int gameId) {
         System.out.println("Open a new game is " + gameId);
         PlayerConnector playerConnector1 = new PlayerConnector(gameId, baseUrl);
         playerConnector1.registerPlayer("Carl");
-
         Game game = playerConnector1.getGame();
-
         IA simpleIA = new SimpleIA();
 
         do {
