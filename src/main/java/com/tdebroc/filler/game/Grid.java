@@ -43,4 +43,7 @@ public class Grid {
 		return grid[x][y];
 	}
 
+    public int getNumberOfCells() {
+        return grid.length * grid.length;
+    }
 }

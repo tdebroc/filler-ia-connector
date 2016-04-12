@@ -161,8 +161,17 @@ public class Game {
         }
     }
 
-
     public boolean determineIfGameIsFinished() {
+        finished = isGameFinished();
+        return finished;
+    }
+
+    private boolean isGameFinished() {
+        for (int i = 0; i < getPlayers().size(); i++) {
+            if (getPlayers().get(i).getScore() > getGrid().getNumberOfCells() / 2) {
+                return true;
+            }
+        }
         for (int i = 0; i < getGrid().getGrid().length; i++) {
             for (int j = 0; j < getGrid().getGrid()[i].length; j++) {
                 if (!getGrid().getCell(i, j).isControlled()) {
@@ -170,7 +179,6 @@ public class Game {
                 }
             }
         }
-        finished = true;
         return true;
     }
 
