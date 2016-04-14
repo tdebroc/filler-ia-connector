@@ -1,7 +1,7 @@
-package com.tdebroc.filler.connector;
+package com.tdebroc.myapp.filler.connector;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.tdebroc.filler.game.Game;
+import com.tdebroc.myapp.filler.game.Game;
 
 import java.io.BufferedReader;
 import java.io.InputStreamReader;

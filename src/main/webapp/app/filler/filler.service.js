@@ -24,6 +24,9 @@
              addGame : function(gridSize) {
                 return $http.get('iaconnector/addGame?gridSize=' + gridSize);
              },
+             getContent : function() {
+                 return $http.get('iaconnector/getContent');
+              },
              addPlayer : function(idGame, newPlayerName) {
                 var url = 'iaconnector/addPlayer?idGame=' + idGame
                  if (newPlayerName) {

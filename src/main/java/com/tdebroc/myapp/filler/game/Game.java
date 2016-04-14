@@ -1,15 +1,22 @@
-package com.tdebroc.filler.game;
+package com.tdebroc.myapp.filler.game;
 
+import javax.persistence.*;
 import java.util.*;
 
+@Entity
 public class Game {
 
     public static final int MAX_NUM_PLAYER = 4;
 
-    private Grid grid;
-
+    @Id
     private int idGame;
 
+    @Column(columnDefinition="text")
+    @Convert(converter = JpaConverterJson.class)
+    private Grid grid;
+
+    @Column(columnDefinition="text")
+    @Convert(converter = JpaConverterJson.class)
     private List<Player> players;
 
     private Date dateCreated;
@@ -24,6 +31,7 @@ public class Game {
 
     static final int DEFAULT_GRID_SIZE = 4;
 
+    @Transient
     Position[] increments = new Position[]{
         new Position(1,0), new Position(0,1),new Position(-1,0),new Position(0,-1)
     };

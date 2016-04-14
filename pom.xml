@@ -566,12 +566,12 @@
                 <configuration>
                     <changeLogFile>src/main/resources/config/liquibase/master.xml</changeLogFile>
                     <diffChangeLogFile>src/main/resources/config/liquibase/changelog/${maven.build.timestamp}_changelog.xml</diffChangeLogFile>
-                    <driver>org.h2.Driver</driver>
-                    <url>jdbc:h2:file:./target/h2db/db/iaconnectorserver</url>
-                    <defaultSchemaName></defaultSchemaName>
-                    <username></username>
-                    <password></password>
-                    <referenceUrl>hibernate:spring:com.tdebroc.myapp.domain?dialect=org.hibernate.dialect.H2Dialect&amp;hibernate.ejb.naming_strategy=org.springframework.boot.orm.jpa.hibernate.SpringNamingStrategy</referenceUrl>
+                    <driver>com.mysql.jdbc.Driver</driver>
+                    <url>jdbc:mysql://localhost:8889/iaconnector</url>
+                    <defaultSchemaName>iaconnector</defaultSchemaName>
+                    <username>root</username>
+                    <password>root</password>
+                    <referenceUrl>hibernate:spring:com.tdebroc.myapp?dialect=org.hibernate.dialect.MySQLInnoDBDialect&amp;hibernate.ejb.naming_strategy=org.springframework.boot.orm.jpa.hibernate.SpringNamingStrategy</referenceUrl>
                     <verbose>true</verbose>
                     <logging>debug</logging>
                 </configuration>

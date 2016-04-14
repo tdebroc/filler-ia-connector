@@ -1,10 +1,10 @@
-package com.tdebroc.filler.game;
+package com.tdebroc.myapp.filler.game;
 
 
-import com.tdebroc.filler.connector.PlayerConnector;
-import com.tdebroc.filler.game.ia.IA;
-import com.tdebroc.filler.game.ia.ManualIA;
-import com.tdebroc.filler.game.ia.SimpleIA;
+import com.tdebroc.myapp.filler.connector.PlayerConnector;
+import com.tdebroc.myapp.filler.game.ia.IA;
+import com.tdebroc.myapp.filler.game.ia.ManualIA;
+import com.tdebroc.myapp.filler.game.ia.SimpleIA;
 
 public class Main {
 

@@ -1,11 +1,14 @@
 package com.tdebroc.myapp.web.rest.filler;
 
-import com.tdebroc.filler.connector.MessageResponse;
-import com.tdebroc.filler.connector.PlayerInstance;
-import com.tdebroc.filler.game.Colors;
-import com.tdebroc.filler.game.Game;
-import com.tdebroc.filler.game.GameSummary;
-import com.tdebroc.myapp.repository.Customer;
+import com.tdebroc.myapp.domain.Content;
+import com.tdebroc.myapp.filler.connector.MessageResponse;
+import com.tdebroc.myapp.filler.connector.PlayerInstance;
+import com.tdebroc.myapp.filler.game.Colors;
+import com.tdebroc.myapp.filler.game.Game;
+import com.tdebroc.myapp.filler.game.GameSummary;
+import com.tdebroc.myapp.domain.Customer;
+import com.tdebroc.myapp.repository.ContentRepository;
+import com.tdebroc.myapp.repository.GameRepository;
 import com.tdebroc.myapp.repository.CustomerRepository;
 import org.slf4j.LoggerFactory;
 import org.springframework.http.HttpStatus;
@@ -18,6 +21,8 @@ import org.springframework.web.bind.annotation.*;
 import javax.inject.Inject;
 import java.net.URISyntaxException;
 import java.util.*;
+
+import com.google.common.collect.Lists;
 
 /**
  * Created by thibautdebroca on 02/04/16.
@@ -39,7 +44,13 @@ public class IAConnectorResource {
     public static Map<String, PlayerInstance> playersInstances = new HashMap<>();
 
     @Inject
-    CustomerRepository repository;
+    GameRepository gameRepository;
+
+    @Inject
+    CustomerRepository customerRepository;
+
+    @Inject
+    ContentRepository contentRepository;
 
     public IAConnectorResource() throws URISyntaxException {
         addGameToGamesMap(13);
@@ -50,21 +61,22 @@ public class IAConnectorResource {
         PlayerInstance playerInstance2 = new PlayerInstance(1, game.getPlayers().size(), "124");
         game.addPlayer();
         playersInstances.put("124", playerInstance2);
+
     }
 
 
     @RequestMapping(method = RequestMethod.GET, value = "/test")
     public int test() throws URISyntaxException {
-        repository.save(new Customer("Jack", "Bauer"));
-        repository.save(new Customer("Chloe", "O'Brian"));
-        repository.save(new Customer("Kim", "Bauer"));
-        repository.save(new Customer("David", "Palmer"));
-        repository.save(new Customer("Michelle", "Dessler"));
+        customerRepository.save(new Customer("Jack", "Bauer"));
+        customerRepository.save(new Customer("Chloe", "O'Brian"));
+        customerRepository.save(new Customer("Kim", "Bauer"));
+        customerRepository.save(new Customer("David", "Palmer"));
+        customerRepository.save(new Customer("Michelle", "Dessler"));
 
         // fetch all customers
         log.info("Customers found with findAll():");
         log.info("-------------------------------");
-        for (Customer customer : repository.findAll()) {
+        for (Customer customer : customerRepository.findAll()) {
             log.info(customer.toString());
         }
         log.info("");
@@ -105,6 +117,7 @@ public class IAConnectorResource {
         }
         int newId = addGameToGamesMap(gridSize);
         refreshGames();
+        gameRepository.save(gamesMap.get(newId));
         return newId;
     }
 
@@ -207,6 +220,17 @@ public class IAConnectorResource {
         return new ResponseEntity<>(game, HttpStatus.OK);
     }
 
+
+    @RequestMapping(method = RequestMethod.GET, value = "/getContent")
+    public ResponseEntity<ArrayList<Content>> getContent() throws URISyntaxException, InterruptedException {
+        System.out.println(
+            Lists.newArrayList(contentRepository.findAll().iterator()).size()
+        );
+
+        return new ResponseEntity<>(
+            Lists.newArrayList(contentRepository.findAll().iterator())
+            , HttpStatus.OK);
+    }
 
 
     public ResponseEntity<MessageResponse> sendMessage(String error, String message) {

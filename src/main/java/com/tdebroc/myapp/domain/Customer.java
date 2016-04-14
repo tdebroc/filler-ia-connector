@@ -1,14 +1,13 @@
-package com.tdebroc.myapp.repository;
+package com.tdebroc.myapp.domain;
 
 /**
  * Created by thibautdebroca on 08/04/16.
  */
-import com.tdebroc.filler.game.Cell;
 
 import javax.persistence.*;
-import javax.transaction.Transactional;
 
 @Entity
+@Table(name = "customer")
 public class Customer {
 
     @Transient
@@ -17,8 +16,10 @@ public class Customer {
     @Id
     private long id;
 
+    @Column(name = "firstName")
     private String firstName;
 
+    @Column(name = "lastName")
     private String lastName;
 
     protected Customer() {}

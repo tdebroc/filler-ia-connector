@@ -27,7 +27,7 @@
     <md-card id="game-content">
         <md-card-title>
             <md-card-title-text>
-                <span class="md-headline">Game {{currentIdGame}}</span>
+                <span class="md-headline">Game {{currentGame.idGame}}</span>
             </md-card-title-text>
         </md-card-title>
         <md-card-content layout="row" layout-align="space-between">
@@ -106,6 +106,10 @@
                 <md-icon class="material-icons" >play_circle_filled</md-icon>
                 Star Game
             </md-button>
+
+            <div ng-if="currentGame.idGame == 1" ng-include="'app/filler/homePage.tmpl.html'">
+            </div>
+
         </md-card-content>
     </md-card>
 

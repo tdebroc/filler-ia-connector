@@ -1,4 +1,4 @@
-package com.tdebroc.filler.connector;
+package com.tdebroc.myapp.filler.connector;
 
 import java.util.Date;
 

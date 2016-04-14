@@ -1,4 +1,4 @@
-package com.tdebroc.filler.connector;
+package com.tdebroc.myapp.filler.connector;
 
 /**
  * Created by thibautdebroca on 03/04/16.

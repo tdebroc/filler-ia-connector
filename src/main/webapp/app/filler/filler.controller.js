@@ -11,6 +11,9 @@
     function FillerController ($scope, Principal, LoginService, FillerService, $mdDialog, $timeout,
                                 $interval, FillerSocketService, $stateParams, $sce) {
 
+        //=====================================================================
+        // Init
+        //=====================================================================
         $scope.currentPlayers = {};
         function loadCurrentPlayers() {
             var currentPlayerString = localStorage.getItem("currentPlayers");
@@ -34,6 +37,9 @@
             return $scope.mapColor[color];
         }
 
+        //=====================================================================
+        // Sockets.
+        //=====================================================================
         FillerSocketService.connect();
         FillerSocketService.receive().then(null, null, function(game) {
             if (game.idGame == $scope.currentIdGame) {
@@ -47,6 +53,7 @@
         FillerSocketService.receiveAllGames().then(null, null, function(allGames) {
             $scope.games = allGames;
         })
+
         //=====================================================================
         // Display/refresh/select Game
         //=====================================================================
@@ -100,13 +107,18 @@
                 colors[c] = $scope.mapColor[c];
 
             }
-            //console.log(colors);
             for (var i = 0; i < currentGame.players.length; i++) {
                 delete colors[currentGame.players[i].playerColor];
             }
 
             return colors;
         }
+
+        FillerService.getContent().then(function(allContent) {
+            $scope.rulesText = allContent.data[0].contentText;
+            $scope.IACompetitionText = allContent.data[1].contentText;
+            $scope.bonusText = allContent.data[2].contentText;
+        })
         //=====================================================================
         // Play Game
         //=====================================================================
@@ -182,8 +194,11 @@
                 $mdDialog.cancel();
               };
               $scope.addGame = function() {
-                FillerService.addGame($scope.addGameGridSize).then(function() {
+                FillerService.addGame($scope.addGameGridSize).then(function(response) {
+                    $scope.selectGame(response.data);
                     $scope.refreshGames();
+                    // $scope.$digest();
+
                 });
                 $mdDialog.hide();
               };
@@ -218,7 +233,8 @@
         //=====================================================================
         function refreshHeight() {
             setTimeout(function() {
-                $("#filler-list").height($(window).height() - $("#filler-list").offset().top - 87);
+                var height = $(document).height() - 87;
+                $("#filler-list").height(height - $("#filler-list").offset().top);
             }, 100)
         }
         $(window).resize(refreshHeight);
@@ -250,6 +266,7 @@
         gameMainPage.players = []
         gameMainPage.started = true;
         gameMainPage.finished = true;
+        gameMainPage.idGame = 1
         var lines = FILLER.split(" ");
         for (var i = 0; i < lines.length; i++) {
             var line = [];

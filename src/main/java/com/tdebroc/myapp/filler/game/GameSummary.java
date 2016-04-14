@@ -1,4 +1,4 @@
-package com.tdebroc.filler.game;
+package com.tdebroc.myapp.filler.game;
 
 import java.util.Date;
 
