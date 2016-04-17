@@ -46,4 +46,9 @@ public class Grid {
     public int getNumberOfCells() {
         return grid.length * grid.length;
     }
+
+    private int numberOfCells;
+    public void setNumberOfCells() {
+
+    }
 }

@@ -12,23 +12,25 @@ public class PlayerConnector {
 
 	private int gameId;
 
-    private String baseUrl = "http://62.210.105.118:8080";
+    private String baseUrl = "http://62.210.105.118:8081";
 
     private String playerUUID;
 
     private PlayerInstance playerInstance;
 
-
-    public PlayerConnector(int gameId) {
-        this.gameId = gameId;
+    public PlayerConnector(int gameId, String baseUrl) {
+        this.setGameId(gameId);
+        this.baseUrl = baseUrl;
     }
-	public PlayerConnector(int gameId, String baseUrl) {
+
+	public PlayerConnector(int gameId, String baseUrl, String playerName) {
 		this.setGameId(gameId);
         this.baseUrl = baseUrl;
+        registerPlayer(playerName);
 	}
 
 	public static void main(String[] args) throws Exception {
-        PlayerConnector c = new PlayerConnector(2, "http://localhost:8080");
+        PlayerConnector c = new PlayerConnector(4, "http://62.210.105.118:8081", "Bob");
 		System.out.println(c.getGame());
 	}
 
@@ -70,7 +72,7 @@ public class PlayerConnector {
         }
     }
 
-    public Game getOpponentMoves() {
+    public Game waitOppenentsAndGetTheirMoves() {
         return ((Game) sentGetAndDeserialize(baseUrl + "/iaconnector/getOpponentMoves?playerUUID=" + playerUUID, Game.class));
     }
 

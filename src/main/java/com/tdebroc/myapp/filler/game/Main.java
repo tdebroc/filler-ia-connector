@@ -28,7 +28,7 @@ public class Main {
         IA simpleIA = new SimpleIA();
 
         do {
-            game = playerConnector1.getOpponentMoves();
+            game = playerConnector1.waitOppenentsAndGetTheirMoves();
             char c = simpleIA.getNextMove(game);
             playerConnector1.sendMove(c);
 
@@ -51,7 +51,7 @@ public class Main {
         ManualIA manualIA = new ManualIA();
 
         do {
-            game = playerConnector1.getOpponentMoves();
+            game = playerConnector1.waitOppenentsAndGetTheirMoves();
             char c = manualIA.getNextMove(game);
             playerConnector1.sendMove(c);
 
@@ -76,11 +76,11 @@ public class Main {
         IA simpleIA2 = new SimpleIA();
 
         do {
-            game = playerConnector1.getOpponentMoves();
+            game = playerConnector1.waitOppenentsAndGetTheirMoves();
             char c = simpleIA.getNextMove(game);
             playerConnector1.sendMove(c);
 
-            game = playerConnector1.getOpponentMoves();
+            game = playerConnector1.waitOppenentsAndGetTheirMoves();
             c = simpleIA2.getNextMove(game);
             playerConnector2.sendMove(c);
 

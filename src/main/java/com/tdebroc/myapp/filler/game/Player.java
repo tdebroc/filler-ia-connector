@@ -1,6 +1,4 @@
-package com.tdebroc.myapp.filler.game;
-
-import com.fasterxml.jackson.annotation.JsonIgnore;
+package com.tdebroc.filler.game;
 
 public class Player {
 
@@ -11,11 +9,6 @@ public class Player {
     private String playerName;
 
 	private int score;
-
-    private int idGame;
-
-    @JsonIgnore
-    private String uuid = "321123";
 
     public final static String PLAYER_NAME_DEFAULT = "Anonymous";
 
@@ -51,11 +44,13 @@ public class Player {
         this.playerName = playerName;
     }
 
-    public String getUuid() {
-        return uuid;
-    }
-
-    public void setUuid(String uuid) {
-        this.uuid = uuid;
+    @Override
+    public String toString() {
+        return "Player{" +
+            "initPosition=" + initPosition +
+            ", playerColor=" + playerColor +
+            ", playerName='" + playerName + '\'' +
+            ", score=" + score +
+            '}';
     }
 }

@@ -1,0 +1,53 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<databaseChangeLog xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+                   xmlns:ext="http://www.liquibase.org/xml/ns/dbchangelog-ext"
+                   xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+                   xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog-ext http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-ext.xsd http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.4.xsd">
+   <changeSet author="thibautdebroca (generated)" id="1460658343246-1">
+      <createTable tableName="content">
+         <column autoIncrement="true" name="id" type="BIGINT">
+            <constraints primaryKey="true" primaryKeyName="contentPK"/>
+         </column>
+         <column name="content_name" type="VARCHAR(255)"/>
+         <column name="content_text" type="CLOB"/>
+         <column name="date" type="datetime"/>
+      </createTable>
+   </changeSet>
+   <changeSet author="thibautdebroca (generated)" id="1460658343246-2">
+      <createTable tableName="customer">
+         <column name="id" type="BIGINT">
+            <constraints nullable="false"/>
+         </column>
+         <column name="first_name" type="VARCHAR(255)"/>
+         <column name="last_name" type="VARCHAR(255)"/>
+      </createTable>
+   </changeSet>
+   <changeSet author="thibautdebroca (generated)" id="1460658343246-3">
+      <createTable tableName="game">
+         <column name="id_game" type="INT">
+            <constraints nullable="false"/>
+         </column>
+         <column name="current_id_player_turn" type="INT">
+            <constraints nullable="false"/>
+         </column>
+         <column name="date_created" type="datetime"/>
+         <column name="finished" type="BOOLEAN">
+            <constraints nullable="false"/>
+         </column>
+         <column name="grid" type="CLOB"/>
+         <column name="players" type="CLOB"/>
+         <column name="round" type="INT">
+            <constraints nullable="false"/>
+         </column>
+         <column name="started" type="BOOLEAN">
+            <constraints nullable="false"/>
+         </column>
+      </createTable>
+   </changeSet>
+   <changeSet author="thibautdebroca (generated)" id="1460658343246-4">
+      <addPrimaryKey columnNames="id" constraintName="customerPK" tableName="customer"/>
+   </changeSet>
+   <changeSet author="thibautdebroca (generated)" id="1460658343246-5">
+      <addPrimaryKey columnNames="id_game" constraintName="gamePK" tableName="game"/>
+   </changeSet>
+</databaseChangeLog>
