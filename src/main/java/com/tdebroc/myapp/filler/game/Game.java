@@ -1,10 +1,11 @@
 package com.tdebroc.myapp.filler.game;
 
 import javax.persistence.*;
+import java.io.Serializable;
 import java.util.*;
 
 @Entity
-public class Game {
+public class Game implements Serializable {
 
     public static final int MAX_NUM_PLAYER = 4;
 
@@ -206,6 +207,10 @@ public class Game {
             Player p = getPlayers().get(i);
             System.out.println("Player " + i + " has " +  colorsCount.get(p.getPlayerColor()));
         }
+    }
+
+    public Player currentPlayerPlaying() {
+        return players.get(currentIdPlayerTurn);
     }
 
 

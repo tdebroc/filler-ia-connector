@@ -84,8 +84,28 @@
         $scope.refreshGame = function(idGame) {
             FillerService.getGame(idGame).then(function(response) {
                 $scope.currentGame = response.data;
+                displayGame(response.data);
             })
         }
+
+        function displayGame(game) {
+            var grid = game.grid.grid;
+            var gridEl = $("<table  id='filler-table-grid'></table>");
+            for (var i = 0; i < grid.length; i++) {
+                var lineEl = $("<tr></tr>");
+                for (var j = 0; j < grid[i].length; j++) {
+                    var cell = grid[i][j];
+                    var cellEl = $("<td></td>");
+                    cellEl.attr("style", "background-color: " +  $scope.getColor(cell.color));
+                    cellEl.html($scope.displayPlayer(i, j, game, cell.color));
+                    lineEl.append(cellEl);
+                }
+                gridEl.append(lineEl);
+            }
+            $("#filler-grid-wrapper").html("");
+            $("#filler-grid-wrapper").append(gridEl);
+        }
+
         // Start
         if (!$scope.currentGame) {
             //$scope.selectGame($stateParams.gameId);
@@ -98,7 +118,7 @@
                     return i + 1;
                 }
             }
-            return $scope.displayCharColor ? color : $sce.trustAsHtml("&nbsp;&nbsp;&nbsp;");
+            return $scope.displayCharColor ? color : ("&nbsp;&nbsp;&nbsp;");
         }
 
         $scope.availableColor = function(currentGame) {
@@ -275,5 +295,6 @@
             }
             gameMainPage.grid.grid.push(line);
         }
+        displayGame(gameMainPage);
     }
 })();

@@ -1,6 +1,8 @@
 package com.tdebroc.myapp.filler.game;
 
-public class Cell {
+import java.io.Serializable;
+
+public class Cell implements Serializable {
 
     private char color;
 

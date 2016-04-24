@@ -31,18 +31,19 @@
             </md-card-title-text>
         </md-card-title>
         <md-card-content layout="row" layout-align="space-between">
-            <div class="card-media">
+            <div class="card-media" id="filler-grid-wrapper">
+                <!--
                 <table id="filler-table-grid">
-                    <tr ng-repeat="line in currentGame.grid.grid" ng-init="x = $index;">
-                        <td ng-repeat="cell in line" ng-style="{'background-color': getColor(cell.color)}"
-                            ng-click="sendMove(cell.color, currentIdGame, currentGame.currentIdPlayerTurn)"
+                    <tr ng-repeat="line in ::currentGame.grid.grid" ng-init="x = $index;">
+                        <td ng-repeat="cell in ::line" ng-style="{'background-color': getColor(cell.color)}"
                             ng-init="y = $index">
                             <span ng-bind-html="displayPlayer(x, y, currentGame, cell.color)"></span>
                         </td>
                     </tr>
                 </table>
-                <div class="spacer" style="clear: both;"></div>
+                -->
             </div>
+            <div class="spacer" style="clear: both;"></div>
             <md-card-actions layout="column">
                 <md-button class="md-icon-button" aria-label="Delete">
                     <md-icon md-font-library="material-icons" ng-click="showConfirmDelete()">delete</md-icon>
@@ -109,7 +110,9 @@
 
             <div ng-if="currentGame.idGame == 1" ng-include="'app/filler/homePage.tmpl.html'">
             </div>
-
+            <div ng-if="currentGame.idGame != 1">
+                {{  currentGame.grid.grid.length * currentGame.grid.grid.length }} points: {{ currentGame.grid.grid.length * currentGame.grid.grid.length / 2 }} needed to win.
+            </div>
         </md-card-content>
     </md-card>
 

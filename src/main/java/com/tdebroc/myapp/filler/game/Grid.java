@@ -1,6 +1,8 @@
 package com.tdebroc.myapp.filler.game;
 
-public class Grid {
+import java.io.Serializable;
+
+public class Grid implements Serializable {
 
 	private Cell[][] grid;
 

@@ -1,6 +1,8 @@
 package com.tdebroc.myapp.filler.game;
 
-public class Position {
+import java.io.Serializable;
+
+public class Position implements Serializable {
 
     private int x;
 

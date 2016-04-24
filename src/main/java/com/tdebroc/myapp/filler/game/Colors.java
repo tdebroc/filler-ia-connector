@@ -1,8 +1,6 @@
 package com.tdebroc.myapp.filler.game;
 
-import java.util.Arrays;
-import java.util.List;
-import java.util.Scanner;
+import java.util.*;
 
 public class Colors {
 
@@ -13,6 +11,20 @@ public class Colors {
 	public static char getRandomColor() {
 		return colors[(int)(colors.length * Math.random())];
 	}
+
+    public static List<Character> getValidColors(List<Player> players) {
+        Set<Character> colorsTaken = new HashSet<Character>();
+        for (int i = 0; i < players.size(); i ++) {
+            colorsTaken.add(players.get(i).getPlayerColor());
+        }
+        List<Character> validColors = new ArrayList<Character>();
+        for (int i = 0; i < colors.length; i ++) {
+            if (!colorsTaken.contains(colors[i])) {
+                validColors.add(colors[i]);
+            }
+        }
+        return validColors;
+    }
 
 	public static char askColor(List<Player> players) {
 		char c;

@@ -67,7 +67,7 @@ public class PlayerConnector {
             System.err.println("Error with the move: " + m.getError());
             return false;
         } else {
-            System.out.println("Move has been played !");
+            System.out.println("Move '"  + c + "' has been played !");
             return true;
         }
     }

@@ -4,17 +4,21 @@ package com.tdebroc.myapp.filler.game;
 import com.tdebroc.myapp.filler.connector.PlayerConnector;
 import com.tdebroc.myapp.filler.game.ia.IA;
 import com.tdebroc.myapp.filler.game.ia.ManualIA;
+import com.tdebroc.myapp.filler.game.ia.MaxSquareIA;
 import com.tdebroc.myapp.filler.game.ia.SimpleIA;
+
+import java.util.Scanner;
 
 public class Main {
 
-    static String baseUrl = "http://62.210.105.118:8081";
+    static String baseUrl = "http://localhost:8080";
 
     public static void main(String[] args) {
 
         // ManualIAVsOther();
-        //onlyIA(44);
-        IAversusIA(2);
+        System.out.println("Please, Enter GameId: ");
+        onlyIA(new Scanner(System.in).nextInt());
+        //IAversusIA(2);
     }
 
     //================================================
@@ -25,13 +29,13 @@ public class Main {
         PlayerConnector playerConnector1 = new PlayerConnector(gameId, baseUrl);
         playerConnector1.registerPlayer("Carl");
         Game game = playerConnector1.getGame();
-        IA simpleIA = new SimpleIA();
+        IA simpleIA = new MaxSquareIA();
 
         do {
             game = playerConnector1.waitOppenentsAndGetTheirMoves();
             char c = simpleIA.getNextMove(game);
             playerConnector1.sendMove(c);
-
+            game = playerConnector1.getGame();
         } while (!game.isFinished());
 
     }

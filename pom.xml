@@ -28,10 +28,6 @@
         </pluginRepository>
     </pluginRepositories>
 
-    <prerequisites>
-        <maven>3.0.0</maven>
-    </prerequisites>
-
     <properties>
         <hikaricp.version>2.4.3</hikaricp.version>
         <assertj-core.version>3.3.0</assertj-core.version>
