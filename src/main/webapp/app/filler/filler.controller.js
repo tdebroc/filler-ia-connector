@@ -196,7 +196,7 @@
         $scope.addGameModal = function(ev) {
             $mdDialog.show({
               controller: DialogController,
-              templateUrl: '/app/filler/addGameDialog.tmpl.html',
+              templateUrl: 'addGameDialog.tmpl.html',
               parent: angular.element(document.body),
               targetEvent: ev,
               preserveScope :true,

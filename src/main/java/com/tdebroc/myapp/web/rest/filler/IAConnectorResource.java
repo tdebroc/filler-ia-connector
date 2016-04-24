@@ -117,7 +117,7 @@ public class IAConnectorResource {
         }
         int newId = addGameToGamesMap(gridSize);
         refreshGames();
-        gameRepository.save(gamesMap.get(newId));
+        // gameRepository.save(gamesMap.get(newId));
         return newId;
     }
 
